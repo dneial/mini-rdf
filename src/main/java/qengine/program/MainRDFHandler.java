@@ -1,5 +1,8 @@
 package qengine.program;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.eclipse.rdf4j.model.Statement;
 import org.eclipse.rdf4j.rio.helpers.AbstractRDFHandler;
 
@@ -14,9 +17,31 @@ import org.eclipse.rdf4j.rio.helpers.AbstractRDFHandler;
  * </p>
  */
 public final class MainRDFHandler extends AbstractRDFHandler {
+	private Map<String, Long> dictionnary = new HashMap<String, Long>();
+	private Long entries = 0L;
 
 	@Override
 	public void handleStatement(Statement st) {
+		String subject = st.getSubject().toString();
+		String predicate = st.getPredicate().stringValue();
+		String object = st.getObject().toString();
+
+		if(!dictionnary.containsKey(subject)) {
+			dictionnary.put(subject, entries);
+			entries++;
+		}
+		if(!dictionnary.containsKey(predicate)) {
+			dictionnary.put(predicate, entries);
+			entries++;
+		}
+		if(!dictionnary.containsKey(object)) {
+			dictionnary.put(object, entries);
+			entries++;
+		}
 		System.out.println("\n" + st.getSubject() + "\t " + st.getPredicate() + "\t " + st.getObject());
-	};
+	}
+
+	public Map<String, Long> getDictionnary() {
+		return dictionnary;
+	}
 }

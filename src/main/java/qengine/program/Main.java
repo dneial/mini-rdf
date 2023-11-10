@@ -128,17 +128,20 @@ final class Main {
 	/**
 	 * Traite chaque triple lu dans {@link #dataFile} avec {@link MainRDFHandler}.
 	 */
-	private static void parseData() throws FileNotFoundException, IOException {
+	private static Map<String, Long> parseData() throws FileNotFoundException, IOException {
 
 		try (Reader dataReader = new FileReader(dataFile)) {
 			// On va parser des données au format ntriples
 			RDFParser rdfParser = Rio.createParser(RDFFormat.NTRIPLES);
 
+			MainRDFHandler handler = new MainRDFHandler();
 			// On utilise notre implémentation de handler
-			rdfParser.setRDFHandler(new MainRDFHandler());
+			rdfParser.setRDFHandler(handler);
 
 			// Parsing et traitement de chaque triple par le handler
 			rdfParser.parse(dataReader, baseURI);
+
+			return handler.getDictionnary();
 		}
 	}
 }
