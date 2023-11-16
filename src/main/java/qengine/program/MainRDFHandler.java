@@ -6,6 +6,8 @@ import java.util.Map;
 import org.eclipse.rdf4j.model.Statement;
 import org.eclipse.rdf4j.rio.helpers.AbstractRDFHandler;
 
+import qengine.structures.Hexastore;
+
 /**
  * Le RDFHandler intervient lors du parsing de données et permet d'appliquer un traitement pour chaque élément lu par le parseur.
  * 
@@ -19,6 +21,7 @@ import org.eclipse.rdf4j.rio.helpers.AbstractRDFHandler;
 public final class MainRDFHandler extends AbstractRDFHandler {
 	private Map<String, Long> dictionnary = new HashMap<String, Long>();
 	private Long entries = 0L;
+	private Hexastore hexastore = new Hexastore();
 
 	@Override
 	public void handleStatement(Statement st) {
@@ -38,7 +41,7 @@ public final class MainRDFHandler extends AbstractRDFHandler {
 			dictionnary.put(object, entries);
 			entries++;
 		}
-		System.out.println("\n" + st.getSubject() + "\t " + st.getPredicate() + "\t " + st.getObject());
+		hexastore.put(dictionnary.get(subject), dictionnary.get(predicate), dictionnary.get(object));
 	}
 
 	public Map<String, Long> getDictionnary() {

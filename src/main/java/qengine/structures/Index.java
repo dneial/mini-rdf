@@ -25,7 +25,7 @@ public class Index {
                 list.add(z);
                 index.get(x).put(y, list);
             }
-        }else{
+        } else {
             ArrayList<Long> list = new ArrayList<>();
             list.add(z);
             Map<Long, ArrayList<Long>> map = new HashMap<>();
@@ -34,7 +34,4 @@ public class Index {
         }
     }
 
-    public void putX(ArrayList<Long> x){
-
-    }
 }
