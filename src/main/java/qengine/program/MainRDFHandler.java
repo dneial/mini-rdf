@@ -6,6 +6,7 @@ import java.util.Map;
 import org.eclipse.rdf4j.model.Statement;
 import org.eclipse.rdf4j.rio.helpers.AbstractRDFHandler;
 
+import qengine.structures.Dictionnary;
 import qengine.structures.Hexastore;
 
 /**
@@ -19,8 +20,7 @@ import qengine.structures.Hexastore;
  * </p>
  */
 public final class MainRDFHandler extends AbstractRDFHandler {
-	private Map<String, Long> dictionnary = new HashMap<String, Long>();
-	private Long entries = 0L;
+	private Dictionnary dictionnary = new Dictionnary();
 	private Hexastore hexastore = new Hexastore();
 
 	@Override
@@ -29,18 +29,10 @@ public final class MainRDFHandler extends AbstractRDFHandler {
 		String predicate = st.getPredicate().stringValue();
 		String object = st.getObject().toString();
 
-		if(!dictionnary.containsKey(subject)) {
-			dictionnary.put(subject, entries);
-			entries++;
-		}
-		if(!dictionnary.containsKey(predicate)) {
-			dictionnary.put(predicate, entries);
-			entries++;
-		}
-		if(!dictionnary.containsKey(object)) {
-			dictionnary.put(object, entries);
-			entries++;
-		}
+		dictionnary.put(subject);
+		dictionnary.put(predicate);
+		dictionnary.put(object);
+
 		hexastore.put(dictionnary.get(subject), dictionnary.get(predicate), dictionnary.get(object));
 	}
 
