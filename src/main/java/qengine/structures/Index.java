@@ -34,4 +34,21 @@ public class Index {
         }
     }
 
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+
+        for(Map.Entry<Long, Map<Long, ArrayList<Long>>> entry : index.entrySet()){
+            for(Map.Entry<Long, ArrayList<Long>> entry2 : entry.getValue().entrySet()){
+                for(Long l : entry2.getValue()){
+                    sb.append("\t(").append(entry.getKey()).append(", ");
+                    sb.append(entry2.getKey()).append(", ");
+                    sb.append(l).append(")\n");
+                }
+            }
+        }
+
+        return sb.toString();
+    }
+
 }

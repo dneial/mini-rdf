@@ -44,7 +44,7 @@ public final class MainRDFHandler extends AbstractRDFHandler {
 		hexastore.put(dictionnary.get(subject), dictionnary.get(predicate), dictionnary.get(object));
 	}
 
-	public Map<String, Long> getDictionnary() {
-		return dictionnary;
+	public Hexastore getHexastore() {
+		return hexastore;
 	}
 }

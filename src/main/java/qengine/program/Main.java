@@ -21,6 +21,8 @@ import org.eclipse.rdf4j.rio.RDFFormat;
 import org.eclipse.rdf4j.rio.RDFParser;
 import org.eclipse.rdf4j.rio.Rio;
 
+import qengine.structures.Hexastore;
+
 /**
  * Programme simple lisant un fichier de requête et un fichier de données.
  * 
@@ -63,17 +65,17 @@ final class Main {
 	public static void processAQuery(ParsedQuery query) {
 		List<StatementPattern> patterns = StatementPatternCollector.process(query.getTupleExpr());
 
-		System.out.println("first pattern : " + patterns.get(0));
+		// System.out.println("first pattern : " + patterns.get(0));
 
-		System.out.println("object of the first pattern : " + patterns.get(0).getObjectVar().getValue());
+		// System.out.println("object of the first pattern : " + patterns.get(0).getObjectVar().getValue());
 
-		System.out.println("variables to project : ");
+		// System.out.println("variables to project : ");
 
 		// Utilisation d'une classe anonyme
 		query.getTupleExpr().visit(new AbstractQueryModelVisitor<RuntimeException>() {
 
 			public void meet(Projection projection) {
-				System.out.println(projection.getProjectionElemList().getElements());
+				// System.out.println(projection.getProjectionElemList().getElements());
 			}
 		});
 	}
@@ -82,7 +84,7 @@ final class Main {
 	 * Entrée du programme
 	 */
 	public static void main(String[] args) throws Exception {
-		parseData();
+		System.out.println(parseData());
 		parseQueries();
 	}
 
@@ -129,7 +131,7 @@ final class Main {
 	/**
 	 * Traite chaque triple lu dans {@link #dataFile} avec {@link MainRDFHandler}.
 	 */
-	private static Map<String, Long> parseData() throws FileNotFoundException, IOException {
+	private static Hexastore parseData() throws FileNotFoundException, IOException {
 
 		try (Reader dataReader = new FileReader(dataFile)) {
 			// On va parser des données au format ntriples
@@ -142,7 +144,7 @@ final class Main {
 			// Parsing et traitement de chaque triple par le handler
 			rdfParser.parse(dataReader, baseURI);
 
-			return handler.getDictionnary();
+			return handler.getHexastore();
 		}
 	}
 }
