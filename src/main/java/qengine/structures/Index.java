@@ -19,7 +19,9 @@ public class Index {
     public void put(Long x, Long y, Long z){
         if(index.containsKey(x)){
             if(index.get(x).containsKey(y)){
-                index.get(x).get(y).add(z);
+                if (!index.get(x).get(y).contains(z)) {
+                    index.get(x).get(y).add(z);
+                }
             }else{
                 ArrayList<Long> list = new ArrayList<>();
                 list.add(z);

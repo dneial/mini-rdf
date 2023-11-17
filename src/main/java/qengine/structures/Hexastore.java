@@ -1,5 +1,7 @@
 package qengine.structures;
 
+import java.util.List;
+
 public class Hexastore {
     private Index spo = new Index();
     private Index sop = new Index();
@@ -7,6 +9,8 @@ public class Hexastore {
     private Index osp = new Index();
     private Index pos = new Index();
     private Index pso = new Index();
+
+    public Dictionnary dico = new Dictionnary();
 
     public void put(Long s, Long p, Long o){
         spo.put(s, p, o);
@@ -39,6 +43,10 @@ public class Hexastore {
 
     public Index getPso() {
         return pso;
+    }
+
+    public List<Long> get(Long p, Long o){
+        return pos.get(p, o);
     }
 
     @Override

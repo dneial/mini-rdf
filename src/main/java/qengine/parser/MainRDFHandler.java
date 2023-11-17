@@ -1,4 +1,4 @@
-package qengine.program;
+package qengine.parser;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -21,6 +21,7 @@ import qengine.structures.Hexastore;
  */
 public final class MainRDFHandler extends AbstractRDFHandler {
 	private Dictionnary dictionnary = new Dictionnary();
+
 	private Hexastore hexastore = new Hexastore();
 
 	@Override
@@ -38,5 +39,9 @@ public final class MainRDFHandler extends AbstractRDFHandler {
 
 	public Hexastore getHexastore() {
 		return hexastore;
+	}
+
+	public Dictionnary getDictionnary() {
+		return dictionnary;
 	}
 }

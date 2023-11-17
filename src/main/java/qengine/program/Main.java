@@ -8,7 +8,6 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Stream;
 
 import org.eclipse.rdf4j.query.algebra.Projection;
@@ -21,6 +20,7 @@ import org.eclipse.rdf4j.rio.RDFFormat;
 import org.eclipse.rdf4j.rio.RDFParser;
 import org.eclipse.rdf4j.rio.Rio;
 
+import qengine.parser.MainRDFHandler;
 import qengine.structures.Hexastore;
 
 /**
@@ -62,7 +62,7 @@ final class Main {
 	/**
 	 * Méthode utilisée ici lors du parsing de requête sparql pour agir sur l'objet obtenu.
 	 */
-	public static void processAQuery(ParsedQuery query) {
+	public static List<StatementPattern> processAQuery(ParsedQuery query) {
 		List<StatementPattern> patterns = StatementPatternCollector.process(query.getTupleExpr());
 
 		System.out.println("first pattern : " + patterns.get(0));
@@ -78,13 +78,16 @@ final class Main {
 				System.out.println(projection.getProjectionElemList().getElements());
 			}
 		});
+		return patterns;
 	}
 
 	/**
 	 * Entrée du programme
 	 */
 	public static void main(String[] args) throws Exception {
-		System.out.println(parseData());
+		Hexastore hexastore = parseData();
+
+
 		parseQueries();
 	}
 
