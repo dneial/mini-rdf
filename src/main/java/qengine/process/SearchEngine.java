@@ -32,13 +32,8 @@ public class SearchEngine {
             String predicate = statementPattern.getPredicateVar().getValue().stringValue();
             String object = statementPattern.getObjectVar().getValue().stringValue();
 
-//            System.out.println("subject : " + subject);
-
             //POS
             List<Long> subjects =  hexastore.get(encode(predicate), encode(object));
-
-            System.out.println("predicate : " + predicate + "\nencoding : " + encode(predicate));
-            System.out.println("object : " + object+ "\nencoding : " + encode(object));
 
             for(Long s : subjects){
                 result.add(decode(s));
