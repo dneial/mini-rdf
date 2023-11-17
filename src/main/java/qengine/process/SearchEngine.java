@@ -9,7 +9,9 @@ import qengine.structures.Hexastore;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class SearchEngine {
     public Dictionnary encoder;
@@ -27,6 +29,7 @@ public class SearchEngine {
     public List<String> query(List<StatementPattern> query){
 
         List<String> result = new ArrayList<>();
+        List<Long> intermediate = new ArrayList<>();
 
         for (StatementPattern statementPattern : query) {
             String predicate = statementPattern.getPredicateVar().getValue().stringValue();
@@ -35,14 +38,32 @@ public class SearchEngine {
             //POS
             List<Long> subjects =  hexastore.get(encode(predicate), encode(object));
 
-            for(Long s : subjects){
-                result.add(decode(s));
+            if (intermediate.isEmpty()) {
+                intermediate.addAll(subjects);
             }
+            else {
+                intermediate.retainAll(subjects);
+                if (intermediate.isEmpty()) return result;
+            }
+            System.out.println(intermediate);
+        }
+
+        for (Long l : intermediate) {
+            result.add(decode(l));
         }
 
         return result;
     }
 
+    public Map<List<StatementPattern>, List<String>> queryAll(List<List<StatementPattern>> queries){
+        Map<List<StatementPattern>, List<String>> result = new HashMap<>();
+
+        for (List<StatementPattern> query : queries) {
+            result.put(query, query(query));
+        }
+
+        return result;
+    }
     private Long encode(String s){
         return encoder.get(s);
     }

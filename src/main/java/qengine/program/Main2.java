@@ -21,15 +21,23 @@ public class Main2 {
         SearchEngine mozilla = new SearchEngine(dataParser);
 
         //print hexastore
-        System.out.println(mozilla.hexastore);
+//        System.out.println(mozilla.hexastore);
 
 
         List<List<StatementPattern>> queries = queryParser.parseQueries();
+        System.out.println(mozilla.queryAll(queries));
+/*
+        List<String> reponse = mozilla.query(queries.get(2));
 
-//        mozilla.query(queries.get(0));
+        System.out.println("Query 1 : " + queries.get(2));
+        System.out.println("response : "+ reponse.size() + " elements" );
 
-        System.out.println("Query 1 : " + queries.get(0));
-        System.out.println("response : " + mozilla.query(queries.get(0)));
+        for( String s : reponse){
+            System.out.println(s);
+        };*/
+
+        //methode pour une liste de requetes
+        //mozilla.query(queries);
 
 
         //on va pouvoir lui faire des requetes
