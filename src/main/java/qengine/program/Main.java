@@ -87,8 +87,43 @@ public class Main {
             }
 
             if (cmd.hasOption("warm")) {
+
+
+                //////TODO : checker warmup car c'est made in ChatGPT
                 String warmPercentage = cmd.getOptionValue("warm");
                 // Utiliser un échantillon de requêtes correspondant au pourcentage "X"
+
+                // Vérifier que le pourcentage est valide
+                try {
+                    int percentage = Integer.parseInt(warmPercentage);
+                    if (percentage < 0 || percentage > 100) {
+                        System.err.println("Erreur : le pourcentage doit être compris entre 0 et 100.");
+                        System.exit(1);
+                    }
+
+                    // Calculer le nombre de requêtes à inclure dans l'échantillon
+                    int numQueries = (percentage * queries.size()) / 100;
+
+                    // Créer un échantillon aléatoire de requêtes
+                    List<List<StatementPattern>> warmupQueries = new ArrayList<>();
+                    List<String> warmupStrQueries = new ArrayList<>();
+                    for (int i = 0; i < numQueries; i++) {
+                        int randomIndex = (int) (Math.random() * queries.size());
+                        warmupQueries.add(queries.get(randomIndex));
+                        warmupStrQueries.add(queryParser.getStrQueries().get(randomIndex));
+                    }
+
+                    // Utiliser l'échantillon pour chauffer le système
+                    for (int i = 0; i < numQueries; i++) {
+                        // Exécuter les requêtes sur votre moteur RDF
+                        System.out.println(mozilla.query(warmupQueries.get(i)));
+                    }
+
+                    // Continuer avec le reste du traitement en utilisant l'échantillon warmupQueries
+                } catch (NumberFormatException e) {
+                    System.err.println("Erreur : le pourcentage doit être un nombre entier.");
+                    System.exit(1);
+                }
             }
 
             if (cmd.hasOption("shuffle")) {
