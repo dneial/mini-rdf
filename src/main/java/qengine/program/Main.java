@@ -1,153 +1,165 @@
 package qengine.program;
 
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.IOException;
-import java.io.Reader;
-import java.nio.file.Files;
-import java.nio.file.Paths;
-import java.util.Iterator;
-import java.util.List;
-import java.util.stream.Stream;
-
-import org.eclipse.rdf4j.query.algebra.Projection;
+import org.apache.commons.cli.*;
+import org.apache.jena.query.*;
+import org.apache.jena.rdf.model.Model;
+import org.apache.jena.rdf.model.ModelFactory;
+import org.apache.jena.util.FileManager;
 import org.eclipse.rdf4j.query.algebra.StatementPattern;
-import org.eclipse.rdf4j.query.algebra.helpers.AbstractQueryModelVisitor;
-import org.eclipse.rdf4j.query.algebra.helpers.StatementPatternCollector;
-import org.eclipse.rdf4j.query.parser.ParsedQuery;
-import org.eclipse.rdf4j.query.parser.sparql.SPARQLParser;
-import org.eclipse.rdf4j.rio.RDFFormat;
-import org.eclipse.rdf4j.rio.RDFParser;
-import org.eclipse.rdf4j.rio.Rio;
+import qengine.parser.QueryParser;
+import qengine.process.SearchEngine;
+import qengine.parser.DataParser;
 
-import qengine.parser.MainRDFHandler;
-import qengine.structures.Hexastore;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 
-/**
- * Programme simple lisant un fichier de requête et un fichier de données.
- * 
- * <p>
- * Les entrées sont données ici de manière statique,
- * à vous de programmer les entrées par passage d'arguments en ligne de commande comme demandé dans l'énoncé.
- * </p>
- * 
- * <p>
- * Le présent programme se contente de vous montrer la voie pour lire les triples et requêtes
- * depuis les fichiers ; ce sera à vous d'adapter/réécrire le code pour finalement utiliser les requêtes et interroger les données.
- * On ne s'attend pas forcémment à ce que vous gardiez la même structure de code, vous pouvez tout réécrire.
- * </p>
- * 
- * @author Olivier Rodriguez <olivier.rodriguez1@umontpellier.fr>
- */
-final class Main {
-	static final String baseURI = null;
+public class Main {
+    public static void main(String[] args) throws Exception {
 
-	/**
-	 * Votre répertoire de travail où vont se trouver les fichiers à lire
-	 */
-	static final String workingDir = "data/";
+        CommandLineParser parser = new DefaultParser();
+        Options options = new Options();
 
-	/**
-	 * Fichier contenant les requêtes sparql
-	 */
-	static final String queryFile = workingDir + "sample_query.queryset";
+        // Définition des options
 
-	/**
-	 * Fichier contenant des données rdf
-	 */
-	static final String dataFile = workingDir + "sample_data.nt";
+        //options obligatoires
+        Option queryOpt = new Option("queries", true, "Chemin vers le fichier contenant les requêtes");
+        queryOpt.setRequired(true);
+        options.addOption(queryOpt);
 
-	// ========================================================================
+        Option dataOpt = new Option("data", true, "Chemin vers le fichier contenant les données");
+        dataOpt.setRequired(true);
+        options.addOption(dataOpt);
 
-	/**
-	 * Méthode utilisée ici lors du parsing de requête sparql pour agir sur l'objet obtenu.
-	 */
-	public static List<StatementPattern> processAQuery(ParsedQuery query) {
-		List<StatementPattern> patterns = StatementPatternCollector.process(query.getTupleExpr());
+        //options facultatives
+        options.addOption("Jena", false, "Active la vérification avec Jena");
+        options.addOption("warm", true, "Utilise un échantillon de requêtes pour chauffer le système");
+        options.addOption("shuffle", false, "Considère une permutation aléatoire des requêtes");
+        options.addOption("output", true, "Chemin vers le fichier de sortie");
 
-		System.out.println("first pattern : " + patterns.get(0));
+        try {
+            CommandLine cmd = parser.parse(options, args);
 
-		System.out.println("object of the first pattern : " + patterns.get(0).getObjectVar().getValue());
-
-		System.out.println("variables to project : ");
-
-		// Utilisation d'une classe anonyme
-		query.getTupleExpr().visit(new AbstractQueryModelVisitor<RuntimeException>() {
-
-			public void meet(Projection projection) {
-				System.out.println(projection.getProjectionElemList().getElements());
-			}
-		});
-		return patterns;
-	}
-
-	/**
-	 * Entrée du programme
-	 */
-	public static void main(String[] args) throws Exception {
-		Hexastore hexastore = parseData();
+            String queriesPath = cmd.getOptionValue("queries");
+            String dataPath = cmd.getOptionValue("data");
+            String outputPath = cmd.getOptionValue("output");
 
 
-		parseQueries();
-	}
+            DataParser dataParser = new DataParser(null, dataPath);
+            QueryParser queryParser = new QueryParser(null, queriesPath);
 
-	// ========================================================================
+            // Récupérer les requêtes
+            List<List<StatementPattern>> queries = queryParser.parseQueries();
 
-	/**
-	 * Traite chaque requête lue dans {@link #queryFile} avec {@link #processAQuery(ParsedQuery)}.
-	 */
-	private static void parseQueries() throws FileNotFoundException, IOException {
-		/**
-		 * Try-with-resources
-		 * 
-		 * @see <a href="https://docs.oracle.com/javase/tutorial/essential/exceptions/tryResourceClose.html">Try-with-resources</a>
-		 */
-		/*
-		 * On utilise un stream pour lire les lignes une par une, sans avoir à toutes les stocker
-		 * entièrement dans une collection.
-		 */
-		try (Stream<String> lineStream = Files.lines(Paths.get(queryFile))) {
-			SPARQLParser sparqlParser = new SPARQLParser();
-			Iterator<String> lineIterator = lineStream.iterator();
-			StringBuilder queryString = new StringBuilder();
+            SearchEngine mozilla = new SearchEngine(dataParser);
 
-			while (lineIterator.hasNext())
-			/*
-			 * On stocke plusieurs lignes jusqu'à ce que l'une d'entre elles se termine par un '}'
-			 * On considère alors que c'est la fin d'une requête
-			 */
-			{
-				String line = lineIterator.next();
-				queryString.append(line);
+            // Traitement des options
+            if (cmd.hasOption("Jena")) {
+                // Activer la vérification avec Jena
+                // Utiliser Jena comme un oracle
 
-				if (line.trim().endsWith("}")) {
-					ParsedQuery query = sparqlParser.parseQuery(queryString.toString(), baseURI);
+                // Créer un modèle vide
+                Model model = ModelFactory.createDefaultModel();
 
-					processAQuery(query); // Traitement de la requête, à adapter/réécrire pour votre programme
+                // Charger le fichier RDF dans le modèle
+                FileManager.get().readModel(model, dataPath);
+                int cpt = 0;
+                // pour chaque requête du fichier de requêtes
+                for (String query : queryParser.getStrQueries()) {
 
-					queryString.setLength(0); // Reset le buffer de la requête en chaine vide
-				}
-			}
-		}
-	}
+                    // Créer une requête Jena
+                    Query jenaQuery = QueryFactory.create(query);
 
-	/**
-	 * Traite chaque triple lu dans {@link #dataFile} avec {@link MainRDFHandler}.
-	 */
-	private static Hexastore parseData() throws FileNotFoundException, IOException {
+                    // Exécuter la requête sur le modèle
+                    try (QueryExecution qexec = QueryExecutionFactory.create(jenaQuery, model)) {
+                        ResultSet jenaResults = qexec.execSelect();
 
-		try (Reader dataReader = new FileReader(dataFile)) {
-			// On va parser des données au format ntriples
-			RDFParser rdfParser = Rio.createParser(RDFFormat.NTRIPLES);
+                        compareResults(jenaResults, mozilla.query(queries.get(cpt++)), cpt);
 
-			MainRDFHandler handler = new MainRDFHandler();
-			// On utilise notre implémentation de handler
-			rdfParser.setRDFHandler(handler);
+                    } catch (Exception e) {
+                        // Gérer l'exception ici
+                        e.printStackTrace();
+                    }
+                }
+                System.exit(0);
+            }
 
-			// Parsing et traitement de chaque triple par le handler
-			rdfParser.parse(dataReader, baseURI);
+            if (cmd.hasOption("warm")) {
+                String warmPercentage = cmd.getOptionValue("warm");
+                // Utiliser un échantillon de requêtes correspondant au pourcentage "X"
+            }
 
-			return handler.getHexastore();
-		}
-	}
+            if (cmd.hasOption("shuffle")) {
+                // Considérer une permutation aléatoire des requêtes
+            }
+
+            // Lire les chemins des fichiers et dossiers fournis en argument
+
+
+            // Charger les requêtes et les données, puis effectuer le traitement
+            // ...
+
+
+
+            //le moteur de recherche va :
+            // - Appeler le parser pour récupérer les données
+            // - créer son  dictionnaire et Hexastore en interne
+
+
+
+
+
+            System.out.println(mozilla.queryAll(queries));
+
+        } catch (ParseException e) {
+            System.err.println("Erreur lors de l'analyse des arguments de ligne de commande: " + e.getMessage());
+            // Afficher l'aide ou quitter le programme
+        }
+
+
+
+
+
+    }
+
+    public static void compareResults(ResultSet jenaResults, List<String> results2, int i) {
+
+        System.out.println("Comparaison des résultats query ("+i+")\n");
+        ArrayList<String> results1 = new ArrayList<>();
+        while (jenaResults.hasNext()) {
+            QuerySolution soln = jenaResults.nextSolution();
+            results1.add(soln.get("v0").toString());
+        }
+
+        if (results1.size() != results2.size()) {
+            System.out.println("Les résultats ne sont pas les mêmes");
+            System.out.println("Jena : " + results1.size() + " résultats");
+            System.out.println("Mozilla : " + results2.size() + " résultats\n");
+        }
+        else {
+            boolean same = true;
+           //intersection entre les deux listes
+
+            System.out.println("jena size = " + results1.size());
+            System.out.println("mozilla size = " + results2.size());
+
+            System.out.println("jena results = " + results1);
+            System.out.println("mozilla results = " + results2);
+
+            results1.retainAll(results2);
+
+            if (results1.size() != results2.size()) {
+                System.out.println("Les résultats ne sont pas les mêmes");
+                System.out.println("Jena : " + results1.size() + " résultats");
+                System.out.println("Mozilla : " + results2.size() + " résultats\n");
+            }
+            else {
+                System.out.println("Les résultats sont les mêmes");
+                System.out.println("Jena : " + results1.size() + " résultats");
+                System.out.println("Mozilla : " + results2.size() + " résultats\n");
+            }
+        }
+    }
+
+
 }

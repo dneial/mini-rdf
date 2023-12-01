@@ -45,7 +45,6 @@ public class SearchEngine {
                 intermediate.retainAll(subjects);
                 if (intermediate.isEmpty()) return result;
             }
-            System.out.println(intermediate);
         }
 
         for (Long l : intermediate) {

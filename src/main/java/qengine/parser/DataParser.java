@@ -14,13 +14,11 @@ import java.io.*;
 public class DataParser {
 
     private String baseURI;
-    private String workingDir;
     private String dataFile;
 
-    public DataParser(String baseURI, String workingDir, String dataFile) {
+    public DataParser(String baseURI, String dataFile) {
         this.baseURI = baseURI;
-        this.workingDir = workingDir;
-        this.dataFile = workingDir +"/"+ dataFile;
+        this.dataFile = dataFile;
         //TODO : vérifier que le fichier existe
     }
 

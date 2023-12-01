@@ -15,19 +15,25 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Stream;
 
 public class QueryParser {
 
     private String baseURI;
-    private String workingDir;
     private String queryFile;
+    private List<String> strQueries;
 
-    public QueryParser(String baseURI, String workingDir, String queryFile) {
+
+    public QueryParser(String baseURI, String queryFile) {
         this.baseURI = baseURI;
-        this.workingDir = workingDir;
-        this.queryFile = workingDir +"/"+ queryFile;
+        this.queryFile = queryFile;
+        this.strQueries = new ArrayList<>();
         //TODO : vérifier que le fichier existe
+    }
+
+    public List<String> getStrQueries() {
+        return strQueries;
     }
 
 
@@ -52,10 +58,13 @@ public class QueryParser {
                 String line = lineIterator.next();
                 queryString.append(line);
 
+
                 if (line.trim().endsWith("}")) {
                     ParsedQuery query = sparqlParser.parseQuery(queryString.toString(), baseURI);
-
                     queries.add(processAQuery(query));
+                    strQueries.add(queryString.toString());
+
+
 
                     // Reset le buffer de la requête en chaine vide
                     queryString.setLength(0);
@@ -66,26 +75,10 @@ public class QueryParser {
     }
 
     public static List<StatementPattern> processAQuery(ParsedQuery query) {
-        List<StatementPattern> patterns = StatementPatternCollector.process(query.getTupleExpr());
 
-        int cpt = 0;
-//        for (StatementPattern pattern : patterns) {
-//            System.out.println("pattern " + cpt + " : " + pattern);
-//            cpt++;
-//        }
-
-        //patterns.get(0).getObjectVar().getValue());
-
-//        System.out.println("variables to project : ");
-
-        // Utilisation d'une classe anonyme
-//        query.getTupleExpr().visit(new AbstractQueryModelVisitor<RuntimeException>() {
-//
-//            public void meet(Projection projection) {
-//                System.out.println(projection.getProjectionElemList().getElements());
-//            }
-//        });
-        return patterns;
+        return StatementPatternCollector.process(query.getTupleExpr());
     }
+
+
 
 }
