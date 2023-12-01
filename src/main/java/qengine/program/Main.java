@@ -64,6 +64,7 @@ public class Main {
                 // Charger le fichier RDF dans le modèle
                 FileManager.get().readModel(model, dataPath);
                 int cpt = 0;
+                int score = 0;
                 // pour chaque requête du fichier de requêtes
                 for (String query : queryParser.getStrQueries()) {
 
@@ -74,13 +75,14 @@ public class Main {
                     try (QueryExecution qexec = QueryExecutionFactory.create(jenaQuery, model)) {
                         ResultSet jenaResults = qexec.execSelect();
 
-                        compareResults(jenaResults, mozilla.query(queries.get(cpt++)), cpt);
+                        score += compareResults(jenaResults, mozilla.query(queries.get(cpt++)), cpt);
 
                     } catch (Exception e) {
                         // Gérer l'exception ici
                         e.printStackTrace();
                     }
                 }
+                System.out.println("Score : " + score + "/" + queryParser.getStrQueries().size());
                 System.exit(0);
             }
 
@@ -109,7 +111,7 @@ public class Main {
 
 
 
-            System.out.println(mozilla.queryAll(queries));
+            System.out.println(mozilla.query(queries.get(3)));
 
         } catch (ParseException e) {
             System.err.println("Erreur lors de l'analyse des arguments de ligne de commande: " + e.getMessage());
@@ -122,9 +124,10 @@ public class Main {
 
     }
 
-    public static void compareResults(ResultSet jenaResults, List<String> results2, int i) {
+    public static int compareResults(ResultSet jenaResults, List<String> results2, int i) {
 
-        System.out.println("Comparaison des résultats query ("+i+")\n");
+//        System.out.println("Comparaison des résultats query ("+i+")\n");
+
         ArrayList<String> results1 = new ArrayList<>();
         while (jenaResults.hasNext()) {
             QuerySolution soln = jenaResults.nextSolution();
@@ -132,33 +135,17 @@ public class Main {
         }
 
         if (results1.size() != results2.size()) {
-            System.out.println("Les résultats ne sont pas les mêmes");
-            System.out.println("Jena : " + results1.size() + " résultats");
-            System.out.println("Mozilla : " + results2.size() + " résultats\n");
+            return 0;
         }
         else {
-            boolean same = true;
            //intersection entre les deux listes
-
-            System.out.println("jena size = " + results1.size());
-            System.out.println("mozilla size = " + results2.size());
-
-            System.out.println("jena results = " + results1);
-            System.out.println("mozilla results = " + results2);
-
             results1.retainAll(results2);
 
             if (results1.size() != results2.size()) {
-                System.out.println("Les résultats ne sont pas les mêmes");
-                System.out.println("Jena : " + results1.size() + " résultats");
-                System.out.println("Mozilla : " + results2.size() + " résultats\n");
-            }
-            else {
-                System.out.println("Les résultats sont les mêmes");
-                System.out.println("Jena : " + results1.size() + " résultats");
-                System.out.println("Mozilla : " + results2.size() + " résultats\n");
+                return 0;
             }
         }
+        return 1;
     }
 
 

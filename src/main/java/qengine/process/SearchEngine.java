@@ -1,7 +1,6 @@
 package qengine.process;
 
 import org.apache.commons.lang3.tuple.Pair;
-import org.apache.commons.lang3.tuple.Triple;
 import org.eclipse.rdf4j.query.algebra.StatementPattern;
 import qengine.parser.DataParser;
 import qengine.structures.Dictionnary;
@@ -37,6 +36,7 @@ public class SearchEngine {
 
             //POS
             List<Long> subjects =  hexastore.get(encode(predicate), encode(object));
+            if (subjects.isEmpty()) return result;
 
             if (intermediate.isEmpty()) {
                 intermediate.addAll(subjects);
