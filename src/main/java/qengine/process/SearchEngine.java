@@ -70,4 +70,31 @@ public class SearchEngine {
     private String decode(Long l){
         return encoder.get(l);
     }
+
+    public static void displayResults(Map<List<StatementPattern>, List<String>> results){
+        if (results.isEmpty()) {
+            System.out.println("Empty Object");
+            return;
+        }
+        if (results.values().stream().allMatch(List::isEmpty)) {
+            System.out.println("Queries returned no results");
+            return;
+        }
+
+        System.out.println(results.size() + " results");
+        System.out.println("Queries :\n");
+        for (Map.Entry<List<StatementPattern>, List<String>> entry : results.entrySet()) {
+            System.out.println("------------\nQuery :");
+
+            System.out.println("SELECT ?v0 WHERE {");
+
+            for (StatementPattern statementPattern : entry.getKey()) {
+                System.out.println("\t" + statementPattern.getPredicateVar().getValue() + " " + statementPattern.getObjectVar().getValue() + " .");
+            }
+            System.out.println("}\n");
+
+            System.out.println("Results : " + results.get(entry.getKey()));
+        }
+
+    }
 }

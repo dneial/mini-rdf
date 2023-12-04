@@ -130,32 +130,15 @@ public class Main {
                 // Considérer une permutation aléatoire des requêtes
             }
 
-            // Lire les chemins des fichiers et dossiers fournis en argument
 
-
-            // Charger les requêtes et les données, puis effectuer le traitement
-            // ...
-
-
-
-            //le moteur de recherche va :
-            // - Appeler le parser pour récupérer les données
-            // - créer son  dictionnaire et Hexastore en interne
-
-
-
-
-
-            System.out.println(mozilla.query(queries.get(3)));
+            // Exécuter les requêtes sur notre moteur RDF si pas d'options
+            Map<List<StatementPattern>, List<String>> results = mozilla.queryAll(queries);
+            SearchEngine.displayResults(results);
 
         } catch (ParseException e) {
             System.err.println("Erreur lors de l'analyse des arguments de ligne de commande: " + e.getMessage());
             // Afficher l'aide ou quitter le programme
         }
-
-
-
-
 
     }
 
