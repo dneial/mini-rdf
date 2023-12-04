@@ -17,12 +17,13 @@ public class SearchEngine {
     public Hexastore hexastore;
     public Logger log;
 
+    Map<List<StatementPattern>, List<String>> results;
 
     public SearchEngine(){}
 
     public void initData(DataParser dataParser) throws IOException {
         Pair<Hexastore, Dictionnary> p = dataParser.parseData();
-
+        this.results = new HashMap<>();
         this.hexastore = p.getLeft();
         this.encoder = p.getRight();
     }
@@ -53,6 +54,7 @@ public class SearchEngine {
             result.add(decode(l));
         }
 
+        this.results.put(query, result);
         return result;
     }
 
@@ -67,6 +69,7 @@ public class SearchEngine {
 
         Logger.instance.stopWorkloadEvalTime();
 
+        this.results = result;
         return result;
     }
     private Long encode(String s){
@@ -77,7 +80,7 @@ public class SearchEngine {
         return encoder.get(l);
     }
 
-    public static void displayResults(Map<List<StatementPattern>, List<String>> results){
+    public void displayResults(){
         if (results.isEmpty()) {
             System.out.println("Empty Object");
             return;
@@ -102,5 +105,9 @@ public class SearchEngine {
             System.out.println("Results : " + results.get(entry.getKey()));
         }
 
+    }
+
+    public Map<List<StatementPattern>, List<String>> getResults() {
+        return results;
     }
 }

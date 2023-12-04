@@ -1,8 +1,0 @@
-Nom du fichier de données, Nom du dossier des requêtes, Nombre de triplets RDF, Nombre de requêtes, Temps de lecture des données (ms), Temps de lecture des requêtes (ms), Temps création dico (ms), Nombre d'index, Temps de création des index (ms), Temps total d'évaluation du workload (ms), Temps total (du début à la fin du programme) (ms)
-data/sample_data.nt, data/sample_query.queryset, 13, 4, 77, 52, 0, 6, 0, 0, 140
-data/100K.nt, data/sample_query.queryset, 107338, 4, 429, 50, 21, 6, 107, 0, 490
-data/100K.nt, data/STAR_ALL_workload.queryset, 107338, 1200, 410, 139, 40, 6, 101, 7, 565
-data/100K.nt, data/sample_query.queryset, 107338, 4, 449, 50, 37, 6, 118, 0, 513
-data/100K.nt, data/sample_query.queryset, 107338, 4, 433, 47, 35, 6, 111, 0, 490
-data/100K.nt, data/sample_query.queryset, 107338, 4, 449, 48, 29, 6, 133, 0, 506
-data/100K.nt, data/STAR_ALL_workload.queryset, 107338, 1200, 411, 137, 59, 6, 88, 5, 564

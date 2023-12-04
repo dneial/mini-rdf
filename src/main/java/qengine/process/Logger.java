@@ -6,7 +6,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 
 public class Logger {
-    public static Logger instance = new Logger(true);
+    public static Logger instance = new Logger();
     public boolean active;
     public String dataPath;
     public String queriesPath;
@@ -24,10 +24,9 @@ public class Logger {
     private long dictLapTime = 0;
     private long hexaLapTime = 0;
 
-    public Logger(boolean b) {
-        this.active = b;
+    public Logger() {
+        this.active = false;
     }
-
 
     public void setActive(boolean active) {
         this.active = active;

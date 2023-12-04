@@ -20,14 +20,10 @@ public class DataParser {
     public DataParser(String baseURI, String dataFile) {
         this.baseURI = baseURI;
         this.dataFile = dataFile;
-        //TODO : vérifier que le fichier existe
+        if(!new File(dataFile).exists())
+            throw new IllegalArgumentException("Le fichier de données n'existe pas");
     }
 
-    public DataParser(String baseURI, String dataFile, Logger log) {
-        this.baseURI = baseURI;
-        this.dataFile = dataFile;
-        //TODO : vérifier que le fichier existe
-    }
 
 
 
@@ -48,5 +44,9 @@ public class DataParser {
             Logger.instance.stopReadDataTime();
             return new ImmutablePair<>(handler.getHexastore(), handler.getDictionnary());
         }
+    }
+
+    public String getDataFile() {
+        return dataFile;
     }
 }

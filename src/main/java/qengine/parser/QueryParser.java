@@ -25,13 +25,15 @@ public class QueryParser {
     private String queryFile;
     private List<String> strQueries;
     public Logger log;
+    private List<List<StatementPattern>> queries;
 
 
     public QueryParser(String baseURI, String queryFile) {
         this.baseURI = baseURI;
         this.queryFile = queryFile;
         this.strQueries = new ArrayList<>();
-        //TODO : vérifier que le fichier existe
+        if(!new File(queryFile).exists())
+            throw new IllegalArgumentException("Le fichier de requêtes n'existe pas");
     }
 
     public List<String> getStrQueries() {
@@ -76,6 +78,7 @@ public class QueryParser {
             Logger.instance.stopReadQueriesTime();
         }
         Logger.instance.setNumQueries(queries.size());
+        this.queries = queries;
         return queries;
     }
 
@@ -85,7 +88,11 @@ public class QueryParser {
     }
 
 
-    public void setLogger(Logger log) {
+    public List<List<StatementPattern>> getQueries() {
+        return queries;
+    }
 
+    public void shuffle() {
+        java.util.Collections.shuffle(queries);
     }
 }
