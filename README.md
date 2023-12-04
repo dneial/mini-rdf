@@ -17,7 +17,7 @@ Exemple d'utilisation :
 
 ```bash
 
-java -jar RDFEngine.jar -queries chemin/vers/requetes.sparql -data chemin/vers/donnees.rdf -Jena -output chemin/vers/sortie -export_results chemin/vers/resultats.csv
+java -jar RDFEngine.jar -queries chemin/vers/requetes.sparql -data chemin/vers/donnees.rdf -output chemin/vers/sortie -export_results chemin/vers/resultats.csv
 ```
 ## Fonctionnalités
 
