@@ -1,0 +1,10 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="SmQ-SmD" type="Application" factoryName="Application">
+    <option name="MAIN_CLASS_NAME" value="qengine.program.Main" />
+    <module name="qengine" />
+    <option name="PROGRAM_PARAMETERS" value="-queries data/sample_query.queryset -data data/sample_data.nt " />
+    <method v="2">
+      <option name="Make" enabled="true" />
+    </method>
+  </configuration>
+</component>
