@@ -15,7 +15,6 @@ import java.util.Map;
 public class SearchEngine {
     public Dictionnary encoder;
     public Hexastore hexastore;
-    public Logger log;
 
     Map<List<StatementPattern>, List<String>> results;
 

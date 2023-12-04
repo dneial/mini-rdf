@@ -10,8 +10,6 @@ public class Hexastore {
     private Index pos = new Index();
     private Index pso = new Index();
 
-    public Dictionnary dico = new Dictionnary();
-
     public void put(Long s, Long p, Long o){
         spo.put(s, p, o);
         sop.put(s, o, p);
