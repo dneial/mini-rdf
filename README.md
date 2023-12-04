@@ -1,8 +1,8 @@
-#RDF Engine
+# RDF Engine
 
 Ce programme Java constitue un moteur de requêtes SPARQL dédié à l'évaluation de requêtes en étoile sur des triplets RDF. Il a été développé dans le cadre de l'UE HAI914I : Gestion des données au-delà de SQL (NoSQL). Le code source est disponible sur GitHub.
 
-##Utilisation
+## Utilisation
 Pour exécuter le programme, vous pouvez utiliser la classe Main avec les options de ligne de commande suivantes :
 
     -queries (obligatoire) : Chemin vers le fichier contenant les requêtes SPARQL en étoile.
@@ -19,7 +19,7 @@ Exemple d'utilisation :
 
 java -jar RDFEngine.jar -queries chemin/vers/requetes.sparql -data chemin/vers/donnees.rdf -Jena -output chemin/vers/sortie -export_results chemin/vers/resultats.csv
 ```
-##Fonctionnalités
+## Fonctionnalités
 
     -Chargement efficace des données RDF et des requêtes.
     -Évaluation des requêtes en étoile avec gestion intelligente des options.
@@ -29,6 +29,6 @@ java -jar RDFEngine.jar -queries chemin/vers/requetes.sparql -data chemin/vers/d
     -Mesures détaillées affichées dans la console et enregistrées dans un fichier CSV avec l'option -output.
     -Export des résultats des requêtes dans un fichier CSV avec l'option -export_results.
 
-###Auteurs
+### Auteurs
 
 Ce projet a été réalisé par Daniel Azevedo Gomes et Sébastien Prud’homme Gateau dans le cadre de l'UE HAI914I.
