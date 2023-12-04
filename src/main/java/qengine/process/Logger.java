@@ -128,6 +128,18 @@ public class Logger {
         //write to file
         log(dataPath, queriesPath, dataTriplets, numQueries, dataReadTime, queriesReadTime, dictCreationTime,
                 numIndexes, indexCreationTime, workloadEvalTime, totalTime, outputPath);
+
+        //dump to console
+        System.out.println("Nom du fichier de données: " + dataPath);
+        System.out.println("Nom du dossier des requêtes: " + queriesPath);
+        System.out.println("Nombre de triplets RDF: " + dataTriplets);
+        System.out.println("Nombre de requêtes: " + numQueries);
+        System.out.println("Temps de lecture des données (ms): " + dataReadTime);
+        System.out.println("Temps de lecture des requêtes (ms): " + queriesReadTime);
+        System.out.println("Temps création dico (ms): " + dictCreationTime);
+        System.out.println("Nombre d'index: " + numIndexes);
+        System.out.println("Temps de création des index (ms): " + indexCreationTime);
+        System.out.println("Temps total d'évaluation du workload (ms): " + workloadEvalTime);
     }
 
     public void countRdfTriple() {
