@@ -15,14 +15,16 @@ import java.util.Map;
 public class SearchEngine {
     public Dictionnary encoder;
     public Hexastore hexastore;
+    public Logger log;
 
 
-    public SearchEngine(DataParser dataParser) throws IOException {
+    public SearchEngine(){}
+
+    public void initData(DataParser dataParser) throws IOException {
         Pair<Hexastore, Dictionnary> p = dataParser.parseData();
 
         this.hexastore = p.getLeft();
         this.encoder = p.getRight();
-
     }
 
     public List<String> query(List<StatementPattern> query){
@@ -57,9 +59,13 @@ public class SearchEngine {
     public Map<List<StatementPattern>, List<String>> queryAll(List<List<StatementPattern>> queries){
         Map<List<StatementPattern>, List<String>> result = new HashMap<>();
 
+        Logger.instance.startWorkloadEvalTime();
+
         for (List<StatementPattern> query : queries) {
             result.put(query, query(query));
         }
+
+        Logger.instance.stopWorkloadEvalTime();
 
         return result;
     }

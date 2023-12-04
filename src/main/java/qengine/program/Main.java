@@ -7,6 +7,7 @@ import org.apache.jena.rdf.model.ModelFactory;
 import org.apache.jena.util.FileManager;
 import org.eclipse.rdf4j.query.algebra.StatementPattern;
 import qengine.parser.QueryParser;
+import qengine.process.Logger;
 import qengine.process.SearchEngine;
 import qengine.parser.DataParser;
 
@@ -43,16 +44,26 @@ public class Main {
 
             String queriesPath = cmd.getOptionValue("queries");
             String dataPath = cmd.getOptionValue("data");
-            String outputPath = cmd.getOptionValue("output");
 
+            if (cmd.hasOption("output")) {
+                // Activer le logger
+                Logger.instance.setActive(true);
+                String outputPath = cmd.getOptionValue("output");
+                Logger.instance.setQueriesPath(queriesPath);
+                Logger.instance.setDataPath(dataPath);
+                Logger.instance.setOutputPath(outputPath);
+                Logger.instance.startTime();
+            }
 
             DataParser dataParser = new DataParser(null, dataPath);
+
             QueryParser queryParser = new QueryParser(null, queriesPath);
 
             // Récupérer les requêtes
             List<List<StatementPattern>> queries = queryParser.parseQueries();
 
-            SearchEngine mozilla = new SearchEngine(dataParser);
+            SearchEngine mozilla = new SearchEngine();
+            mozilla.initData(dataParser);
 
             // Traitement des options
             if (cmd.hasOption("Jena")) {
@@ -89,9 +100,6 @@ public class Main {
 
             if (cmd.hasOption("warm")) {
 
-
-                //////TODO : checker warmup car c'est made in ChatGPT
-
                 // Utiliser un échantillon de requêtes correspondant au pourcentage "X"
                 String warmPercentage = cmd.getOptionValue("warm");
 
@@ -103,12 +111,12 @@ public class Main {
                         System.exit(1);
                     }
 
-                    System.out.println("Warming up avec " + warmPercentage + "% des requêtes");
+                   // System.out.println("Warming up avec " + warmPercentage + "% des requêtes");
 
                     // Calculer le nombre de requêtes à inclure dans l'échantillon
-                    int numQueries = (percentage * queries.size()) / 100;
+                    int numQueries = (percentage * queries.size()) / 100 + 1;
 
-                    System.out.println("Nombre de requêtes : " + numQueries + "/" + queries.size());
+                   // System.out.println("Nombre de requêtes : " + numQueries + "/" + queries.size());
 
                     // Créer un échantillon aléatoire de requêtes
                     List<List<StatementPattern>> warmupQueries = new ArrayList<>();
@@ -119,11 +127,11 @@ public class Main {
                         warmupStrQueries.add(queryParser.getStrQueries().get(randomIndex));
                     }
 
+                    Map<List<StatementPattern>, List<String>> results;
+
                     // Utiliser l'échantillon pour chauffer le système
-                    for (int i = 0; i < numQueries; i++) {
-                        // Exécuter les requêtes sur votre moteur RDF
-                        System.out.println(mozilla.query(warmupQueries.get(i)));
-                    }
+                    // Exécuter les requêtes sur votre moteur RDF
+                    results = mozilla.queryAll(warmupQueries);
 
                     // Continuer avec le reste du traitement en utilisant l'échantillon warmupQueries
                 } catch (NumberFormatException e) {
@@ -138,9 +146,19 @@ public class Main {
             }
 
 
-            // Exécuter les requêtes sur notre moteur RDF si pas d'options
-            Map<List<StatementPattern>, List<String>> results = mozilla.queryAll(queries);
-            SearchEngine.displayResults(results);
+            if (!cmd.hasOption("Jena")) {
+                // Exécuter les requêtes sur notre moteur RDF si pas d'options
+                Logger.instance.startWorkloadEvalTime();
+
+                Map<List<StatementPattern>, List<String>> results = mozilla.queryAll(queries);
+
+
+                //SearchEngine.displayResults(results);
+
+            }
+
+            Logger.instance.stopTotalTime();
+            Logger.instance.dump();
 
         } catch (ParseException e) {
             System.err.println("Erreur lors de l'analyse des arguments de ligne de commande: " + e.getMessage());

@@ -6,6 +6,7 @@ import org.eclipse.rdf4j.query.algebra.helpers.AbstractQueryModelVisitor;
 import org.eclipse.rdf4j.query.algebra.helpers.StatementPatternCollector;
 import org.eclipse.rdf4j.query.parser.ParsedQuery;
 import org.eclipse.rdf4j.query.parser.sparql.SPARQLParser;
+import qengine.process.Logger;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -23,6 +24,7 @@ public class QueryParser {
     private String baseURI;
     private String queryFile;
     private List<String> strQueries;
+    public Logger log;
 
 
     public QueryParser(String baseURI, String queryFile) {
@@ -49,6 +51,7 @@ public class QueryParser {
             Iterator<String> lineIterator = lineStream.iterator();
             StringBuilder queryString = new StringBuilder();
 
+            Logger.instance.startReadQueriesTime();
             while (lineIterator.hasNext())
                 /*
                  * On stocke plusieurs lignes jusqu'à ce que l'une d'entre elles se termine par un '}'
@@ -70,7 +73,9 @@ public class QueryParser {
                     queryString.setLength(0);
                 }
             }
+            Logger.instance.stopReadQueriesTime();
         }
+        Logger.instance.setNumQueries(queries.size());
         return queries;
     }
 
@@ -80,5 +85,7 @@ public class QueryParser {
     }
 
 
+    public void setLogger(Logger log) {
 
+    }
 }
