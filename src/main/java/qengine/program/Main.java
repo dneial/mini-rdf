@@ -11,6 +11,7 @@ import qengine.process.SearchEngine;
 import qengine.parser.DataParser;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
@@ -133,6 +134,7 @@ public class Main {
 
             if (cmd.hasOption("shuffle")) {
                 // Considérer une permutation aléatoire des requêtes
+                Collections.shuffle(queries);
             }
 
 
