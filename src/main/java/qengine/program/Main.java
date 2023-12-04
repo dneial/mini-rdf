@@ -90,8 +90,9 @@ public class Main {
 
 
                 //////TODO : checker warmup car c'est made in ChatGPT
-                String warmPercentage = cmd.getOptionValue("warm");
+
                 // Utiliser un échantillon de requêtes correspondant au pourcentage "X"
+                String warmPercentage = cmd.getOptionValue("warm");
 
                 // Vérifier que le pourcentage est valide
                 try {
@@ -101,8 +102,12 @@ public class Main {
                         System.exit(1);
                     }
 
+                    System.out.println("Warming up avec " + warmPercentage + "% des requêtes");
+
                     // Calculer le nombre de requêtes à inclure dans l'échantillon
                     int numQueries = (percentage * queries.size()) / 100;
+
+                    System.out.println("Nombre de requêtes : " + numQueries + "/" + queries.size());
 
                     // Créer un échantillon aléatoire de requêtes
                     List<List<StatementPattern>> warmupQueries = new ArrayList<>();
