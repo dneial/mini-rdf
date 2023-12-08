@@ -12,10 +12,12 @@ def execute_java_program(query_file, data_file):
 
 def run():
     cur_dir = os.getcwd()
+
     # Dossier contenant les fichiers de requêtes
-    query_folder = os.path.abspath(os.path.join(cur_dir, "/data/queries/100/"))
+    query_folder = os.path.abspath(os.path.join(cur_dir, "data/queries/100/"))
+
     # Dossier contenant les fichiers de données
-    data_folder = os.path.abspath(os.path.join(cur_dir, "/data/data/"))
+    data_folder = os.path.abspath(os.path.join(cur_dir, "data/data/"))
 
     # Chemin du fichier CSV de sortie
     csv_file_path = os.path.abspath(os.path.join(cur_dir, "resultats100.csv"))
