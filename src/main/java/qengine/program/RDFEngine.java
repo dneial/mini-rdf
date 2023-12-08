@@ -133,8 +133,13 @@ public class RDFEngine {
     public void run() {
         searchEngine.queryAll(queryParser.getQueries());
         searchEngine.displayResults();
-
     }
+
+    public int runCount() {
+        searchEngine.queryAll(queryParser.getQueries());
+        return searchEngine.emptyQueries;
+    }
+
 
     public void dumpResults(String directoryPath) throws IOException {
 
@@ -172,4 +177,5 @@ public class RDFEngine {
             e.printStackTrace();
         }
     }
+
 }
