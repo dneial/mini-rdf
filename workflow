@@ -15,3 +15,17 @@
     Tester les requetes et les données sur notre modèle :
 
 
+elements du csv :
+
+Nom du template de requete,
+Nom du fichier de requêtes,
+Nom du fichier de données,
+Nombre de requêtes,
+Nombre de données,
+Nombre de requetes sans resultats,
+
+
+pour chqaue fichier de requete dans dossier (A),
+    pour chaque fichier de données dans dossier (B),
+        lancer le programme : java -jar RDFEngine.jar -q (A) -d (B) -c (renvoie le nombre de requetes sans resultats)
+        insérer le résultat du programme dans le csv
