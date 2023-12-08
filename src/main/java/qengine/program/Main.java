@@ -15,6 +15,15 @@ public class Main {
             String queriesPath = cmd.getOptionValue("queries");
             String dataPath = cmd.getOptionValue("data");
 
+            if (cmd.hasOption("count")) {
+                // Compter le nombre de requêtes vides
+                Logger.instance.setActive(false);
+                RDFEngine rdfEngine = new RDFEngine(dataPath, queriesPath);
+                rdfEngine.load();
+                System.out.println(rdfEngine.runCount());
+                System.exit(0);
+            }
+
             if (cmd.hasOption("output")) {
                 // Activer le logger
                 Logger.instance.setActive(true);
@@ -87,20 +96,21 @@ public class Main {
         // Définition des options
 
         //options obligatoires
-        Option queryOpt = new Option("queries", true, "Chemin vers le fichier contenant les requêtes");
+        Option queryOpt = new Option("q","queries", true, "Chemin vers le fichier contenant les requêtes");
         queryOpt.setRequired(true);
         options.addOption(queryOpt);
 
-        Option dataOpt = new Option("data", true, "Chemin vers le fichier contenant les données");
+        Option dataOpt = new Option("d","data", true, "Chemin vers le fichier contenant les données");
         dataOpt.setRequired(true);
         options.addOption(dataOpt);
 
         //options facultatives
-        options.addOption("Jena", false, "Active la vérification avec Jena");
-        options.addOption("warm", true, "Utilise un échantillon de requêtes pour chauffer le système");
-        options.addOption("shuffle", false, "Considère une permutation aléatoire des requêtes");
-        options.addOption("output", true, "Chemin vers le fichier de sortie");
-        options.addOption("export_results", true, "Enregistrer les résultats des requêtes dans un fichier CSV");
+        options.addOption("w", "warm", true, "Utilise un échantillon de requêtes pour chauffer le système");
+        options.addOption("o", "output", true, "Chemin vers le fichier de sortie");
+        options.addOption("j", "Jena", false, "Active la vérification avec Jena");
+        options.addOption("e", "export_results", true, "Enregistrer les résultats des requêtes dans un fichier CSV");
+        options.addOption("c", "count", false, "Compter le nombre de requêtes vides");
+        options.addOption("s", "shuffle", false, "Considère une permutation aléatoire des requêtes");
         return options;
     }
 

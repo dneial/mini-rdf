@@ -15,6 +15,7 @@ import java.util.Map;
 public class SearchEngine {
     public Dictionnary encoder;
     public Hexastore hexastore;
+    public int emptyQueries = 0;
 
     Map<List<StatementPattern>, List<String>> results;
 
@@ -38,14 +39,20 @@ public class SearchEngine {
 
             //POS
             List<Long> subjects =  hexastore.get(encode(predicate), encode(object));
-            if (subjects.isEmpty()) return result;
+            if (subjects.isEmpty()) {
+                emptyQueries++;
+                return result;
+            }
 
             if (intermediate.isEmpty()) {
                 intermediate.addAll(subjects);
             }
             else {
                 intermediate.retainAll(subjects);
-                if (intermediate.isEmpty()) return result;
+                if (intermediate.isEmpty()) {
+                    emptyQueries++;
+                    return result;
+                }
             }
         }
 
@@ -109,4 +116,6 @@ public class SearchEngine {
     public Map<List<StatementPattern>, List<String>> getResults() {
         return results;
     }
+
+
 }
