@@ -1,8 +1,6 @@
 package qengine.parser;
 
-import org.eclipse.rdf4j.query.algebra.Projection;
 import org.eclipse.rdf4j.query.algebra.StatementPattern;
-import org.eclipse.rdf4j.query.algebra.helpers.AbstractQueryModelVisitor;
 import org.eclipse.rdf4j.query.algebra.helpers.StatementPatternCollector;
 import org.eclipse.rdf4j.query.parser.ParsedQuery;
 import org.eclipse.rdf4j.query.parser.sparql.SPARQLParser;
@@ -13,9 +11,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Stream;
 
 public class QueryParser {
@@ -98,6 +94,25 @@ public class QueryParser {
     public int getNumberOfDuplicateQueries() {
         int sizeQ = queries.size();
         int sizeSet = queries.stream().distinct().toArray().length;
+        System.out.println("Number of distinct queries : " + sizeSet);
         return sizeQ - sizeSet;
+
     }
+
+    //crée un benchmark avec uniquement des requêtes distinctes
+    // et un autre avec une seule requête dupliquée assez de fois pour avoir la même taille que le premier
+    public void writeDistinctBench() throws IOException {
+
+
+        Object[] dist = strQueries.stream().distinct().toArray();
+        int size = dist.length;
+
+        System.out.println("Number of distinct queries : " + size);
+
+        List<String> s = List.of(Arrays.toString(dist));
+        Files.write(Paths.get("distinctQueries.queryset"), s);
+        Files.write(Paths.get("duplicataQueries.queryset"), Collections.nCopies(size, s.get(0)));
+    }
+
+
 }
