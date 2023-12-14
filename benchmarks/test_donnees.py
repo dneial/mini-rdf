@@ -1,6 +1,17 @@
 import os
 import csv
 import subprocess
+import matplotlib.pyplot as plt
+import pandas as pd
+
+csv_headers = [
+    "Nom du template de requete",
+    "Nom du fichier de requetes",
+    "Nom du fichier de données",
+    "Nombre de requêtes",
+    "Nombre de données",
+    "Nombre de requetes sans resultats",
+]
 
 
 # Fonction pour exécuter la commande Java et obtenir le nombre de requêtes sans résultats
@@ -19,14 +30,6 @@ def run():
     querynb = [100, 1000, 10000]
 
     # Entêtes du fichier CSV
-    csv_headers = [
-        "Nom du template de requete",
-        "Nom du fichier de requetes",
-        "Nom du fichier de données",
-        "Nombre de requêtes",
-        "Nombre de données",
-        "Nombre de requetes sans resultats",
-    ]
 
     progression = 0
 
@@ -87,5 +90,70 @@ def run():
             print(f"\nLe fichier CSV a été créé avec succès : {csv_file_path}\n")
         progression = 0
 
+def plot():
+    cur_dir = os.getcwd()
+
+    # Chemin du fichier CSV de sortie
+    csv_file_path_100 = os.path.abspath(os.path.join(cur_dir, "resultats100.csv"))
+
+    df_100 = pd.read_csv(csv_file_path_100)
+
+    # x = nom du fichier de requêtes
+    # y = nombre de requêtes sans résultats
+    #
+    df_100["Nombre de requetes sans resultats"] = df_100[
+        "Nombre de requetes sans resultats"
+    ].astype("int")
+
+    df_100["Nom du fichier de requetes"] = df_100[
+        "Nom du fichier de requetes"
+    ].str.replace("_100.queryset", "")
+
+    # # Chemin du fichier CSV de sortie
+    #  csv_file_path_1000 = os.path.abspath(os.path.join(cur_dir, "resultats1000.csv"))
+
+    #  df_1000 = pd.read_csv(csv_file_path_1000)
+
+    #  # x = nom du fichier de requêtes
+    #  # y = nombre de requêtes sans résultats
+    #  #
+    #  df_1000["Nombre de requetes sans resultats"] = df_1000[
+    #      "Nombre de requetes sans resultats"
+    #  ].astype("int")
+
+    #  df_1000["Nom du fichier de requetes"] = df_1000[
+    #      "Nom du fichier de requetes"
+    #  ].str.replace("_1000.queryset", "")
+
+    #  # Chemin du fichier CSV de sortie
+    #  csv_file_path_10000 = os.path.abspath(os.path.join(cur_dir, "resultats10000.csv"))
+
+    #  df_10000 = pd.read_csv(csv_file_path_10000)
+
+    #  # x = nom du fichier de requêtes
+    #  # y = nombre de requêtes sans résultats
+    #  #
+    #  df_10000["Nombre de requetes sans resultats"] = df_10000[
+    #      "Nombre de requetes sans resultats"
+    #  ].astype("int")
+
+    #  df_10000["Nom du fichier de requetes"] = df_10000[
+    #      "Nom du fichier de requetes"
+    #  ].str.replace("_10000.queryset", "")
+    plt.figure(figsize=(10, 10))
+    plt.subplot(3, 1, 1)
+    plt.bar(
+        df_100["Nom du fichier de requetes"],
+        df_100["Nombre de requetes sans resultats"],
+    )
+    plt.title("Nombre de requêtes sans résultats pour 100 requêtes")
+    plt.xticks(rotation=35, ha="right")
+
+    plt.subplot(3, 1, 2)
+
+    plt.subplots_adjust(hspace=0.5)
+    plt.show()
+
+
 if __name__ == "__main__":
-    run()
+    plot()
