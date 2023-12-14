@@ -25,7 +25,52 @@ Nombre de données,
 Nombre de requetes sans resultats,
 
 
-pour chqaue fichier de requete dans dossier (A),
+pour chaque fichier de requete dans dossier (A),
     pour chaque fichier de données dans dossier (B),
         lancer le programme : java -jar RDFEngine.jar -q (A) -d (B) -c (renvoie le nombre de requetes sans resultats)
         insérer le résultat du programme dans le csv
+
+
+
+
+Log 14/12/2023 18:08:30
+
+scripts :
+    tests_données.py :
+        [pour chaque fichier de requete dans dossier (A),
+            pour chaque fichier de données dans dossier (B),
+                lancer le programme : java -jar RDFEngine.jar -q (A) -d (B) -c (renvoie le nombre de requetes sans resultats)
+                insérer le résultat du programme dans le csv
+        ]
+
+    select_queries.py :
+        [filtre les patrons de requete ayant moins de 60% de perte
+        (nombre de requetes sans resultats > 60% du nombre de requetes total)
+        et les réunit dans un seul fichier de requetes : benchmark.queryset
+        ]
+
+    output_anal.py :
+        [
+            visualise les différences de temps de réponse entre les executions de queryset ayant des doublons ou pas
+        ]
+
+Ajouts fonctionnalités:
+
+    option -qi : montre le nombre de doublons dans le fichier de requetes utilisé
+    QueryParser.writeDistinctBench : crée 2 fichier de requetes :
+        - distinctQueries.queryset : requetes sans doublons
+        - duplicateQueries.queryset : requetes avec doublons
+
+    DEDUCTION : LES DOUBLONS CA INFLUE SUR LE TEMPS DE REPONSE ??
+
+
+    ON VEUT:
+    - analyser les temps de réponse des différents patterns de requetes
+    plot chaque pattern
+
+    errer
+
+
+
+
+    $wsdwdrwgrbmkj cfbklqhhpibh

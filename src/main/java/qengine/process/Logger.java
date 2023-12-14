@@ -64,10 +64,10 @@ public class Logger {
         if (!file.exists()) {
             try (BufferedWriter writer = new BufferedWriter(new FileWriter(outputPath))) {
                 // Écrire l'en-tête CSV
-                writer.write("Nom du fichier de données, Nom du dossier des requêtes, Nombre de triplets RDF, " +
-                        "Nombre de requêtes, Temps de lecture des données (ms), Temps de lecture des requêtes (ms), " +
-                        "Temps création dico (ms), Nombre d'index, Temps de création des index (ms), " +
-                        "Temps total d'évaluation du workload (ms), Temps total (du début à la fin du programme) (ms)\n");
+                writer.write("Nom du fichier de données,Nom du dossier des requêtes,Nombre de triplets RDF," +
+                        "Nombre de requêtes,Temps de lecture des données (ms),Temps de lecture des requêtes (ms)," +
+                        "Temps création dico (ms),Nombre d'index,Temps de création des index (ms)," +
+                        "Temps total d'évaluation du workload (ms),Temps total (du début à la fin du programme) (ms)\n");
 
             } catch (IOException e) {
                 throw new RuntimeException(e);
@@ -90,7 +90,7 @@ public class Logger {
                                     long indexCreationTime, long workloadEvalTime, long totalTime, String outputPath) {
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(outputPath, true))) {
             // Écrire la ligne de données CSV
-            writer.write(String.format("%s, %s, %d, %d, %d, %d, %d, %d, %d, %d, %d\n",
+            writer.write(String.format("%s,%s,%d,%d,%d,%d,%d,%d,%d,%d,%d\n",
                     dataPath, queriesPath, dataTriplets, numQueries, dataReadTime, queriesReadTime,
                     dictCreationTime, numIndexes, indexCreationTime, workloadEvalTime, totalTime));
         } catch (IOException e) {

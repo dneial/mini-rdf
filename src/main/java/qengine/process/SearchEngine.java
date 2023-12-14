@@ -111,13 +111,11 @@ public class SearchEngine {
 
             System.out.println("Results : " + results.get(entry.getKey()));
         }
-
     }
 
     public Map<List<StatementPattern>, List<String>> getResults() {
         return results;
     }
-
 
     public static void main(String[] args) throws IOException {
         //methode pour créer deux fichiers de benchmark:
