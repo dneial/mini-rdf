@@ -150,7 +150,7 @@ def plot():
         df_100["Nombre de requetes sans resultats"],
     )
     plt.title("Nombre de requêtes sans résultats pour 100 requêtes")
-    plt.xticks(rotation=35, ha="right")
+    plt.xticks(rotation=25, ha="right")
 
     plt.subplot(3, 1, 2)
     plt.bar(
@@ -158,7 +158,7 @@ def plot():
         df_1000["Nombre de requetes sans resultats"],
     )
     plt.title("Nombre de requêtes sans résultats pour 1000 requêtes")
-    plt.xticks(rotation=35, ha="right")
+    plt.xticks(rotation=25, ha="right")
 
     plt.subplot(3, 1, 3)
     plt.bar(
@@ -166,9 +166,9 @@ def plot():
         df_10000["Nombre de requetes sans resultats"],
     )
     plt.title("Nombre de requêtes sans résultats pour 10000 requêtes")
-    plt.xticks(rotation=35, ha="right")
+    plt.xticks(rotation=25, ha="right")
 
-    plt.subplots_adjust(hspace=0.5)
+    plt.subplots_adjust(hspace=1)
     plt.show()
 
 
