@@ -16,7 +16,6 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Stream;
 
 public class QueryParser {
@@ -94,5 +93,11 @@ public class QueryParser {
 
     public void shuffle() {
         java.util.Collections.shuffle(queries);
+    }
+
+    public int getNumberOfDuplicateQueries() {
+        int sizeQ = queries.size();
+        int sizeSet = queries.stream().distinct().toArray().length;
+        return sizeQ - sizeSet;
     }
 }

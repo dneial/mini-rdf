@@ -37,6 +37,11 @@ public class Main {
             rdfEngine.load();
 
 
+            if (cmd.hasOption("query_info")) {
+                // Afficher des informations sur les requêtes
+                rdfEngine.printQueryInfo();
+            }
+
             // Traitement des options
             if (cmd.hasOption("Jena")) {
                 rdfEngine.runJenaValidation();
@@ -111,6 +116,7 @@ public class Main {
         options.addOption("e", "export_results", true, "Enregistrer les résultats des requêtes dans un fichier CSV");
         options.addOption("c", "count", false, "Compter le nombre de requêtes vides");
         options.addOption("s", "shuffle", false, "Considère une permutation aléatoire des requêtes");
+        options.addOption("qi", "query_info", false, "Affiche des informations sur les requêtes");
         return options;
     }
 

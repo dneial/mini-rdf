@@ -1,13 +1,10 @@
 package qengine.program;
 
-import org.apache.commons.io.FilenameUtils;
 import org.apache.jena.query.*;
 import org.apache.jena.rdf.model.Model;
 import org.apache.jena.rdf.model.ModelFactory;
 import org.apache.jena.util.FileManager;
-import org.apache.jena.util.FileUtils;
 import org.eclipse.rdf4j.query.algebra.StatementPattern;
-import org.eclipse.rdf4j.query.impl.SimpleDataset;
 import qengine.parser.DataParser;
 import qengine.parser.QueryParser;
 import qengine.process.SearchEngine;
@@ -16,7 +13,6 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -132,7 +128,7 @@ public class RDFEngine {
 
     public void run() {
         searchEngine.queryAll(queryParser.getQueries());
-        searchEngine.displayResults();
+        // searchEngine.displayResults();
     }
 
     public int runCount() {
@@ -176,6 +172,12 @@ public class RDFEngine {
         catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    public void printQueryInfo() {
+        System.out.println("Nombre de requêtes : " + queryParser.getQueries().size());
+        //nombre de requetes doubles
+        System.out.println("Nombre de requêtes dupliquées : " + queryParser.getNumberOfDuplicateQueries());
     }
 
 }
