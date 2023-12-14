@@ -103,16 +103,22 @@ public class QueryParser {
     // et un autre avec une seule requête dupliquée assez de fois pour avoir la même taille que le premier
     public void writeDistinctBench() throws IOException {
 
+        List<String> dist = strQueries.stream().distinct().toList();
 
-        Object[] dist = strQueries.stream().distinct().toArray();
-        int size = dist.length;
+        int size = dist.size();
 
         System.out.println("Number of distinct queries : " + size);
 
-        List<String> s = List.of(Arrays.toString(dist));
-        Files.write(Paths.get("distinctQueries.queryset"), s);
-        Files.write(Paths.get("duplicataQueries.queryset"), Collections.nCopies(size, s.get(0)));
+        //ajouter les requetes distinctes au fichier de benchmark
+        Files.write(Paths.get("distinctQueries.queryset"), dist);
+
+        //prendre la première requête et la dupliquer assez de fois pour avoir la même taille que le premier
+        String first = strQueries.get(0);
+
+        List<String> dup = new ArrayList<>();
+        for (int i = 0; i < size; i++) {
+            dup.add(first);
+        }
+        Files.write(Paths.get("duplicateQueries.queryset"), dup);
     }
-
-
 }
