@@ -42,6 +42,7 @@
 					</descriptorRefs>
 					<finalName>RDFEngine</finalName>
 					<appendAssemblyId>false</appendAssemblyId>
+					<outputDirectory>.</outputDirectory>
 				</configuration>
 				<executions>
 					<execution>
