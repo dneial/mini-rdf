@@ -3,6 +3,7 @@ package qengine.process;
 import org.apache.commons.lang3.tuple.Pair;
 import org.eclipse.rdf4j.query.algebra.StatementPattern;
 import qengine.parser.DataParser;
+import qengine.parser.QueryParser;
 import qengine.structures.Dictionnary;
 import qengine.structures.Hexastore;
 
@@ -118,6 +119,15 @@ public class SearchEngine {
     }
 
 
+    public static void main(String[] args) throws IOException {
+        //methode pour créer deux fichiers de benchmark:
+        // un avec uniquement des requêtes distinctes
+        // un avec une seule requête dupliquée assez de fois pour avoir la même taille que le premier
 
+        SearchEngine searchEngine = new SearchEngine();
+        QueryParser queryParser = new QueryParser(null, "resultats/benchmark.queryset");
+        queryParser.parseQueries();
+        queryParser.writeDistinctBench();
+    }
 
 }
