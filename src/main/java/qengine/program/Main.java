@@ -23,7 +23,6 @@ public class Main {
                 Logger.instance.setQueriesPath(queriesPath);
                 Logger.instance.setDataPath(dataPath);
                 Logger.instance.setOutputPath(outputPath);
-                Logger.instance.startTime();
             }
 
             RDFEngine rdfEngine = new RDFEngine(dataPath, queriesPath);
@@ -55,6 +54,7 @@ public class Main {
                     System.err.println("Erreur : le pourcentage doit être un nombre entier.");
                     System.exit(1);
                 }
+
             }
 
             if (cmd.hasOption("query_info")) {
@@ -70,6 +70,7 @@ public class Main {
 
             if (!cmd.hasOption("Jena")) {
                 // Exécuter les requêtes sur notre moteur RDF si pas d'option Jena
+                Logger.instance.startTime();
                 rdfEngine.run();
             }
 
@@ -81,6 +82,7 @@ public class Main {
 
             Logger.instance.stopTotalTime();
             Logger.instance.dump();
+
             if(cmd.hasOption("export_results")){
                 String exportPath = cmd.getOptionValue("export_results");
                 rdfEngine.dumpResults(exportPath);
@@ -108,21 +110,13 @@ public class Main {
         options.addOption(dataOpt);
 
         //options facultatives
-
-        //options pour l'execution
         options.addOption("w", "warm", true, "Utilise un échantillon de requêtes pour chauffer le système");
-        options.addOption("j", "Jena", false, "Active la vérification avec Jena");
-        options.addOption("s", "shuffle", false, "Considère une permutation aléatoire des requêtes");
-
-        //options pour le logger
         options.addOption("o", "output", true, "Chemin vers le fichier de sortie");
+        options.addOption("j", "Jena", false, "Active la vérification avec Jena");
         options.addOption("e", "export_results", true, "Enregistrer les résultats des requêtes dans un fichier CSV");
         options.addOption("c", "count", false, "Compter le nombre de requêtes vides");
+        options.addOption("s", "shuffle", false, "Considère une permutation aléatoire des requêtes");
         options.addOption("qi", "query_info", false, "Affiche des informations sur les requêtes");
-
-        //option pour l'analyse des templates de requete
-        options.addOption("a", "analysis", true, "Analyse des templates de requete pour le benchmark");
-
         return options;
     }
 

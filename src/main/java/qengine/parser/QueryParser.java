@@ -18,7 +18,6 @@ public class QueryParser {
 
     private String baseURI;
     private String queryFile;
-    private List<String> strQueries;
     public Logger log;
     private List<List<StatementPattern>> queries;
 
@@ -26,14 +25,33 @@ public class QueryParser {
     public QueryParser(String baseURI, String queryFile) {
         this.baseURI = baseURI;
         this.queryFile = queryFile;
-        this.strQueries = new ArrayList<>();
         if(!new File(queryFile).exists())
             throw new IllegalArgumentException("Le fichier de requêtes n'existe pas");
     }
 
 
     public List<String> getStrQueries() {
-        return strQueries;
+        List<String> strqueries = new ArrayList<>();
+        for(List<StatementPattern> q: queries) {
+            StringBuilder strquery = new StringBuilder();
+            strquery.append("SELECT ?v0 WHERE {\n");
+            for(StatementPattern sp: q) {
+                //nt format
+                strquery
+                    .append("\t")
+                    .append("?")
+                    .append(sp.getSubjectVar().getName())
+                    .append("\t<")
+                    .append(sp.getPredicateVar().getValue())
+                    .append(">\t<")
+                    .append(sp.getObjectVar().getValue())
+                    .append(">");
+                if(q.indexOf(sp) != q.size()-1) strquery.append(" .\n");
+            }
+            strquery.append(" }");
+            strqueries.add(strquery.toString());
+        }
+        return strqueries;
     }
 
     public List<List<StatementPattern>> parseQueries(String queryPath) throws FileNotFoundException, IOException {
@@ -67,7 +85,6 @@ public class QueryParser {
                 if (line.trim().endsWith("}")) {
                     ParsedQuery query = sparqlParser.parseQuery(queryString.toString(), baseURI);
                     queries.add(processAQuery(query));
-                    strQueries.add(queryString.toString());
 
 
 
@@ -108,6 +125,8 @@ public class QueryParser {
     // et un autre avec une seule requête dupliquée assez de fois pour avoir la même taille que le premier
     public void writeDistinctBench() throws IOException {
 
+        List<String> strQueries = getStrQueries();
+
         List<String> dist = strQueries.stream().distinct().toList();
 
         int size = dist.size();
@@ -125,5 +144,11 @@ public class QueryParser {
             dup.add(first);
         }
         Files.write(Paths.get("duplicateQueries.queryset"), dup);
+    }
+
+    public static void main(String[] args) throws FileNotFoundException, IOException{
+        QueryParser qp = new QueryParser(null, "data/queries/100/Q_4_location_nationality_gender_type_100.queryset");
+        qp.parseQueries();
+
     }
 }

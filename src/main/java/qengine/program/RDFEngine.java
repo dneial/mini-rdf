@@ -122,8 +122,6 @@ public class RDFEngine {
         // Exécuter les requêtes sur votre moteur RDF
         results = searchEngine.queryAll(warmupQueries);
 
-        // Continuer avec le reste du traitement en utilisant l'échantillon warmupQueries
-
     }
 
     public void shuffle() {
@@ -132,7 +130,6 @@ public class RDFEngine {
 
     public void run() {
         searchEngine.queryAll(queryParser.getQueries());
-        // searchEngine.displayResults();
     }
 
     public int runCount() {
