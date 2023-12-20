@@ -24,6 +24,27 @@ class Header {
             dico_creation_time, nb_indexes, indexes_creation_time, workload_time, total_time);
 }
 
+
+class HeaderAnalyse{
+//  - le temps de lecture moyen des requetes
+//  - le temps de réponse moyen de chaque pattern
+//  - le nombre de requetes dans le fichier
+//  - le nombre de doublons dans le fichier
+//  - le nombre d' uniques dans le fichier
+//  - le nombre de requetes sans resultats
+
+    public static final String queryfile="template";
+    public static final String avgreq="tmps lecture moyen requetes";
+    public static final String avgpat="tmps reponse moyen pattern";
+    public static final String nbreq="nb requetes";
+    public static final String nbdouble="nb doublons";
+    public static final String nbunique="nb uniques";
+    public static final String nbreqsansresult="nb requetes sans resultats";
+
+    public static final String HEADER = String.format("%s,%s,%s,%s,%s,%s,%s\n",
+            queryfile, avgreq, avgpat, nbreq, nbdouble, nbunique, nbreqsansresult);
+
+}
 public class Logger {
 
     public static Logger instance = new Logger();
@@ -44,7 +65,7 @@ public class Logger {
     private long dictLapTime = 0;
     private long hexaLapTime = 0;
 
-    public Logger() {
+    private Logger() {
         this.active = false;
     }
 
@@ -181,5 +202,13 @@ public class Logger {
 
     public void stopTotalTime() {
         this.totalTime = System.currentTimeMillis() - this.startTime;
+    }
+
+
+    public long getReadQueriesTime() {
+        return queriesReadTime;
+    }
+    public long getWorkloadTime() {
+        return workloadEvalTime;
     }
 }

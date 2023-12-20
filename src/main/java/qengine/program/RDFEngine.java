@@ -35,6 +35,10 @@ public class RDFEngine {
         this.queryParser.parseQueries();
     }
 
+    public void loadQueries(String queriesPath) throws Exception {
+        this.queryParser.parseQueries(queriesPath);
+    }
+
     public void runJenaValidation() {
         // Activer la vérification avec Jena
         // Utiliser Jena comme un oracle
@@ -183,5 +187,11 @@ public class RDFEngine {
     public int countEmptyQueries() {
         return searchEngine.emptyQueries;
     }
+
+    public int countDuplicateQueries() {
+        return queryParser.getNumberOfDuplicateQueries();
+    }
+
+
 
 }

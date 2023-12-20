@@ -31,10 +31,15 @@ public class QueryParser {
             throw new IllegalArgumentException("Le fichier de requêtes n'existe pas");
     }
 
+
     public List<String> getStrQueries() {
         return strQueries;
     }
 
+    public List<List<StatementPattern>> parseQueries(String queryPath) throws FileNotFoundException, IOException {
+        this.queryFile = queryPath;
+        return parseQueries();
+    }
 
     public List<List<StatementPattern>> parseQueries() throws FileNotFoundException, IOException {
         /*
