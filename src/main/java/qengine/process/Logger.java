@@ -4,24 +4,24 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.text.SimpleDateFormat;
 
 class Header {
+    public static final String moteur = "moteur";
     public static final String datafile = "fichier donnees";
-    public static final String queryfile="fichier requetes";
-    public static final String nb_triplets="nb triplets RDF";
-    public static final String nb_queries="nb requetes";
-    public static final String data_reading_time="tps lecture donnees (ms)";
-    public static final String query_reading_time="tps lecture requetes (ms)";
-    public static final String dico_creation_time="tps creation dico (ms)";
-    public static final String nb_indexes="nb index";
-    public static final String indexes_creation_time="tps creation des index (ms)";
-    public static final String workload_time="tps total workload (ms)";
-    public static final String total_time="Temps total (ms)";
+    public static final String queryfile = "fichier requetes";
+    public static final String nb_triplets = "nb triplets RDF";
+    public static final String nb_queries = "nb requetes";
+    public static final String data_reading_time = "tps lecture donnees (ms)";
+    public static final String query_reading_time = "tps lecture requetes (ms)";
+    public static final String dico_creation_time = "tps creation dico (ms)";
+    public static final String nb_indexes = "nb index";
+    public static final String indexes_creation_time = "tps creation des index (ms)";
+    public static final String workload_time = "tps total workload (ms)";
+    public static final String total_time = "Temps total (ms)";
 
 
-    public static final String HEADER = String.format("%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s\n",
-            datafile, queryfile, nb_triplets, nb_queries, data_reading_time, query_reading_time,
+    public static final String HEADER = String.format("%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s\n",
+            moteur, datafile, queryfile, nb_triplets, nb_queries, data_reading_time, query_reading_time,
             dico_creation_time, nb_indexes, indexes_creation_time, workload_time, total_time);
 }
 
@@ -213,7 +213,21 @@ public class Logger {
         return workloadEvalTime;
     }
 
+<<<<<<< HEAD
     public void setNumTriplets(long size) {
         this.dataTriplets = (int) size;
+=======
+    public static void reset() {
+        instance.dataTriplets = 0;
+        instance.numQueries = 0;
+        instance.dataReadTime = 0;
+        instance.queriesReadTime = 0;
+        instance.dictCreationTime = 0;
+        instance.numIndexes = 6;
+        instance.indexCreationTime = 0;
+        instance.workloadEvalTime = 0;
+        instance.startTime = 0;
+        instance.totalTime = 0;
+>>>>>>> origin/master
     }
 }
