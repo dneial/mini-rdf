@@ -18,9 +18,7 @@
 
 | Nom du template de requête | Nom du fichier de requêtes | Nom du fichier de données | Nombre de requêtes | Nombre de données | Nombre de requêtes sans résultats |
 |---------------------------|-----------------------------|--------------------------|--------------------|-------------------|----------------------------------|
-
 ** Pour chaque fichier de requête dans le dossier (A)
-
 *** Pour chaque fichier de données dans le dossier (B)
 
     Lancer le programme : `java -jar RDFEngine.jar -q (A) -d (B) -c` (renvoie le nombre de requêtes sans résultats)
@@ -65,4 +63,3 @@
 
     - Errer
 
-* $wsdwdrwgrbmkj cfbklqhhpibh

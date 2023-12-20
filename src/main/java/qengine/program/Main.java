@@ -17,7 +17,6 @@ public class Main {
 
 
             if (cmd.hasOption("output")) {
-                // Activer le logger
                 Logger.instance.setActive(true);
                 String outputPath = cmd.getOptionValue("output");
                 Logger.instance.setQueriesPath(queriesPath);
