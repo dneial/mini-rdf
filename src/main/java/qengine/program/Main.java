@@ -28,7 +28,6 @@ public class Main {
             rdfEngine.load();
 
             if (cmd.hasOption("shuffle")) {
-                System.out.println("everyday im shuffling");
                 // Considérer une permutation aléatoire des requêtes
                 rdfEngine.shuffle();
             }

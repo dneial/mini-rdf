@@ -8,6 +8,7 @@ import org.eclipse.rdf4j.query.algebra.StatementPattern;
 import qengine.parser.DataParser;
 import qengine.parser.QueryParser;
 import qengine.process.SearchEngine;
+import qengine.process.Logger;
 
 import java.io.BufferedWriter;
 import java.io.File;
@@ -87,8 +88,6 @@ public class RDFEngine {
 
     private static int compareResults(ResultSet jenaResults, List<String> results2, int i) {
 
-//        System.out.println("Comparaison des résultats query ("+i+")\n");
-
         ArrayList<String> results1 = new ArrayList<>();
         while (jenaResults.hasNext()) {
             QuerySolution soln = jenaResults.nextSolution();
@@ -107,6 +106,38 @@ public class RDFEngine {
             }
         }
         return 1;
+    }
+
+    public void runJena() {
+        Logger.instance.startReadDataTime();
+
+        Model model = ModelFactory.createDefaultModel();
+        // Charger le fichier RDF dans le modèle
+        FileManager.get().readModel(model, dataParser.getDataFile());
+        Logger.instance.stopReadDataTime();
+
+        List<Query> jenaQueries = new ArrayList<>();
+
+        Logger.instance.startReadQueriesTime();
+        // pour chaque requête du fichier de requêtes
+        for (String query : queryParser.getStrQueries()) {
+            jenaQueries.add(QueryFactory.create(query));
+        }
+        Logger.instance.stopReadQueriesTime();
+
+        Logger.instance.startWorkloadEvalTime();
+        for(Query query : jenaQueries){
+            try (QueryExecution qexec = QueryExecutionFactory.create(query, model)) {
+                ResultSet jenaResults = qexec.execSelect();
+                while (jenaResults.hasNext()) {
+                    QuerySolution soln = jenaResults.nextSolution();
+                }
+            } catch (Exception e) {
+                // Gérer l'exception ici
+                e.printStackTrace();
+            }
+        }
+        Logger.instance.stopWorkloadEvalTime();
     }
 
     public void warmup(int percentage){
