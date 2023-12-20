@@ -1,0 +1,68 @@
+* Etapes initiales
+
+1. Compiler WatDiv
+   - `make clean`
+   - `make`
+
+2. Générer les données (1 = 15 MB de données, 10 = 150 MB de données, 100 = 1.5 GB de données)
+   - `bin/Release/watdiv -d model/wsdbm-data-model.txt 1`
+   - Résultat dans `/watdiv-mini-projet/testsuite/dataset/`
+
+3. Générer les requêtes (nombre à changer dans le script, default = 100)
+   - `./regenerate_queryset.sh`
+   - Résultat dans `/watdiv-mini-projet/testsuite/queries/`
+
+* Tester les requêtes et les données sur notre modèle
+
+** Éléments du CSV
+
+| Nom du template de requête | Nom du fichier de requêtes | Nom du fichier de données | Nombre de requêtes | Nombre de données | Nombre de requêtes sans résultats |
+|---------------------------|-----------------------------|--------------------------|--------------------|-------------------|----------------------------------|
+
+** Pour chaque fichier de requête dans le dossier (A)
+
+*** Pour chaque fichier de données dans le dossier (B)
+
+    Lancer le programme : `java -jar RDFEngine.jar -q (A) -d (B) -c` (renvoie le nombre de requêtes sans résultats)
+
+    Insérer le résultat du programme dans le CSV
+
+* Log 14/12/2023 18:08:30
+
+** Scripts
+
+*** `tests_données.py`
+
+    Pour chaque fichier de requête dans le dossier (A),
+
+    Pour chaque fichier de données dans le dossier (B),
+
+    Lancer le programme : `java -jar RDFEngine.jar -q (A) -d (B) -c` (renvoie le nombre de requêtes sans résultats)
+
+    Insérer le résultat du programme dans le CSV
+
+*** `select_queries.py`
+
+    Filtre les patrons de requête ayant moins de 60% de perte (nombre de requêtes sans résultats > 60% du nombre de requêtes total) et les réunit dans un seul fichier de requêtes : `benchmark.queryset`
+
+*** `output_anal.py`
+
+    Visualise les différences de temps de réponse entre les exécutions de `queryset` ayant des doublons ou pas
+
+* Ajouts fonctionnalités
+
+    - Option `-qi` : montre le nombre de doublons dans le fichier de requêtes utilisé
+    - `QueryParser.writeDistinctBench` : crée 2 fichiers de requêtes :
+        - `distinctQueries.queryset` : requêtes sans doublons
+        - `duplicateQueries.queryset` : requêtes avec doublons
+
+    ** DÉDUCTION : LES DOUBLONS CA INFLUE SUR LE TEMPS DE REPONSE ??
+
+    ** ON VEUT
+
+    - Analyser les temps de réponse des différents patterns de requêtes
+      Plot chaque pattern
+
+    - Errer
+
+* $wsdwdrwgrbmkj cfbklqhhpibh
