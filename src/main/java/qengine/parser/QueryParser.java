@@ -25,7 +25,7 @@ public class QueryParser {
     public QueryParser(String baseURI, String queryFile) {
         this.baseURI = baseURI;
         this.queryFile = queryFile;
-        if(!new File(queryFile).exists())
+        if(queryFile != null && !new File(queryFile).exists())
             throw new IllegalArgumentException("Le fichier de requêtes n'existe pas");
     }
 
@@ -55,7 +55,9 @@ public class QueryParser {
     }
 
     public List<List<StatementPattern>> parseQueries(String queryPath) throws FileNotFoundException, IOException {
+
         this.queryFile = queryPath;
+
         return parseQueries();
     }
 
@@ -64,6 +66,9 @@ public class QueryParser {
          * On utilise un stream pour lire les lignes une par une, sans avoir à toutes les stocker
          * entièrement dans une collection.
          */
+
+        if (queryFile == null || queryFile.isEmpty())
+            return null;
 
         List<List<StatementPattern>> queries = new ArrayList<>();
         try (Stream<String> lineStream = Files.lines(Paths.get(queryFile))) {
@@ -83,10 +88,9 @@ public class QueryParser {
 
 
                 if (line.trim().endsWith("}")) {
+//                    System.out.println(queryString.toString());
                     ParsedQuery query = sparqlParser.parseQuery(queryString.toString(), baseURI);
                     queries.add(processAQuery(query));
-
-
 
                     // Reset le buffer de la requête en chaine vide
                     queryString.setLength(0);
@@ -103,8 +107,7 @@ public class QueryParser {
 
         return StatementPatternCollector.process(query.getTupleExpr());
     }
-
-
+    
     public List<List<StatementPattern>> getQueries() {
         return queries;
     }
@@ -126,24 +129,18 @@ public class QueryParser {
     public void writeDistinctBench() throws IOException {
 
         List<String> strQueries = getStrQueries();
+        
+        queries = queries.stream().distinct().toList();
 
-        List<String> dist = strQueries.stream().distinct().toList();
-
-        int size = dist.size();
-
-        System.out.println("Number of distinct queries : " + size);
+        System.out.println("Number of distinct queries : " + queries.size());
 
         //ajouter les requetes distinctes au fichier de benchmark
-        Files.write(Paths.get("distinctQueries.queryset"), dist);
+        Files.write(Paths.get("distinctQueries.queryset"), getStrQueries());
 
-        //prendre la première requête et la dupliquer assez de fois pour avoir la même taille que le premier
-        String first = strQueries.get(0);
+    }
 
-        List<String> dup = new ArrayList<>();
-        for (int i = 0; i < size; i++) {
-            dup.add(first);
-        }
-        Files.write(Paths.get("duplicateQueries.queryset"), dup);
+    public void setQueries(List<List<StatementPattern>> newQueries) {
+        this.queries = newQueries;
     }
 
     public static void main(String[] args) throws FileNotFoundException, IOException{

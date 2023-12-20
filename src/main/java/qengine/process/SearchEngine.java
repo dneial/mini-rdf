@@ -67,7 +67,7 @@ public class SearchEngine {
 
     public Map<List<StatementPattern>, List<String>> queryAll(List<List<StatementPattern>> queries){
         Map<List<StatementPattern>, List<String>> result = new HashMap<>();
-
+        this.emptyQueries = 0;
         Logger.instance.startWorkloadEvalTime();
 
         for (List<StatementPattern> query : queries) {
