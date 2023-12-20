@@ -4,5 +4,7 @@ target/
 out/
 data/
 *.csv
+*~lock.*
 RDFEngine.jar
 ```
+

@@ -30,9 +30,19 @@ public class RDFEngine {
         this.searchEngine = new SearchEngine();
     }
 
+    public RDFEngine(String dataPath, QueryParser queryParser) {
+        this.dataParser = new DataParser(null, dataPath);
+        this.queryParser = queryParser;
+        this.searchEngine = new SearchEngine();
+    }
+
     public void load() throws Exception {
         this.searchEngine.initData(this.dataParser);
         this.queryParser.parseQueries();
+    }
+
+    public void loadData() throws Exception {
+        this.searchEngine.initData(this.dataParser);
     }
 
     public void loadQueries(String queriesPath) throws Exception {
@@ -122,6 +132,8 @@ public class RDFEngine {
         // Exécuter les requêtes sur votre moteur RDF
         results = searchEngine.queryAll(warmupQueries);
 
+        // Continuer avec le reste du traitement en utilisant l'échantillon warmupQueries
+
     }
 
     public void shuffle() {
@@ -130,6 +142,7 @@ public class RDFEngine {
 
     public void run() {
         searchEngine.queryAll(queryParser.getQueries());
+        // searchEngine.displayResults();
     }
 
     public int runCount() {
@@ -190,5 +203,33 @@ public class RDFEngine {
     }
 
 
+    public void removeEmptyQueries() throws IOException {
+        List<List<StatementPattern>> queries = queryParser.getQueries();
 
+        List<List<StatementPattern>> newQueries = new ArrayList<>();
+
+        for (int i = 0; i < queries.size(); i++) {
+            if (!searchEngine.query(queries.get(i)).isEmpty()) {
+                newQueries.add(queries.get(i));
+            }else if (queries.get(i).size() >= 4){
+                //3 chance sur 10 de garder une requete vide de taille 4
+                if (Math.random() < 0.3){
+                    newQueries.add(queries.get(i));
+                }
+            }
+        }
+        queryParser.setQueries(newQueries);
+
+        System.out.println("Nombre de requetes ayant des résultats : " + queryParser.getQueries().size());
+
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter("data/queries/benchmark.queryset", false))) {
+            // Écrire la ligne de données CSV
+            for(String query : queryParser.getStrQueries()) {
+                writer.write(query + "\n");
+            }
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 }

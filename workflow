@@ -104,3 +104,33 @@ Log 15/12
         - le nombre de doublons dans le fichier
         - le nombre d' uniques dans le fichier
         - le nombre de requetes sans resultats
+
+
+    Misc TODO :
+        - retirer strQueries de QueryParser
+            => si option Jena transformer les requetes en string plutot
+
+
+
+    on prend : requetes qui ont un résultat
+
+
+On remarque :
+    peu de résultats => temps de réponse très court
+        explication :
+            - pour les requêtes composées on stoppe execution dès qu'un pattren ne renvoie rien
+
+        utilité :
+            pour benchmark on veut vitesse d'execution
+            => on veut des requetes qui ont un résultat
+
+
+
+        Base de requetes 1 :
+            pas de doublons
+            pas de requetes sans resultats
+
+        Base de requetes 2 :
+            pas de doublons
+            peu de requetes sans resultats
+            on garde quand même les Q4 pour avoir de la variété
