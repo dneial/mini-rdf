@@ -1,21 +1,21 @@
-Nom du fichier de données, Nom du dossier des requêtes, Nombre de triplets RDF, Nombre de requêtes, Temps de lecture des données (ms), Temps de lecture des requêtes (ms), Temps création dico (ms), Nombre d'index, Temps de création des index (ms), Temps total d'évaluation du workload (ms), Temps total (du début à la fin du programme) (ms)
-./data/data/500K.nt, ./distinctQueries.queryset, 529580, 6527, 3249, 579, 323, 6, 971, 37, 3876
-./data/data/500K.nt, ./duplicateQueries.queryset, 529580, 6527, 3233, 537, 327, 6, 1035, 22, 3802
-./data/data/500K.nt, ./distinctQueries.queryset, 529580, 6527, 3242, 693, 327, 6, 1090, 106, 4052
-./data/data/500K.nt, ./duplicateQueries.queryset, 529580, 6527, 3248, 602, 344, 6, 1029, 22, 3882
-./data/data/500K.nt, ./distinctQueries.queryset, 529580, 6527, 3260, 609, 304, 6, 1070, 60, 3941
-./data/data/500K.nt, ./duplicateQueries.queryset, 529580, 6527, 3114, 541, 316, 6, 973, 22, 3687
-./data/data/500K.nt, ./distinctQueries.queryset, 529580, 6527, 3269, 686, 366, 6, 964, 112, 4077
-./data/data/500K.nt, ./duplicateQueries.queryset, 529580, 6527, 3260, 544, 309, 6, 953, 22, 3837
-./data/data/500K.nt, ./distinctQueries.queryset, 529580, 6527, 3270, 618, 460, 6, 922, 43, 3940
-./data/data/500K.nt, ./duplicateQueries.queryset, 529580, 6527, 3395, 625, 310, 6, 1005, 36, 4067
-./data/data/500K.nt, ./distinctQueries.queryset, 529580, 6527, 3369, 673, 404, 6, 932, 48, 4102
-./data/data/500K.nt, ./duplicateQueries.queryset, 529580, 6527, 3347, 666, 338, 6, 911, 37, 4059
-./data/data/500K.nt, ./distinctQueries.queryset, 529580, 6527, 3456, 785, 305, 6, 1062, 127, 4379
-./data/data/500K.nt, ./duplicateQueries.queryset, 529580, 6527, 3337, 658, 290, 6, 935, 34, 4042
-./data/data/500K.nt, ./distinctQueries.queryset, 529580, 6527, 3424, 675, 307, 6, 1017, 64, 4174
-./data/data/500K.nt, ./duplicateQueries.queryset, 529580, 6527, 3412, 620, 351, 6, 933, 26, 4068
-./data/data/500K.nt, ./distinctQueries.queryset, 529580, 6527, 3476, 662, 337, 6, 1119, 62, 4209
-./data/data/500K.nt, ./duplicateQueries.queryset, 529580, 6527, 3493, 659, 336, 6, 1076, 37, 4198
-./data/data/500K.nt, ./distinctQueries.queryset, 529580, 6527, 3500, 815, 292, 6, 1021, 118, 4445
-./data/data/500K.nt, ./duplicateQueries.queryset, 529580, 6527, 3516, 752, 430, 6, 1109, 35, 4315
+Nom du fichier de données,Nom du dossier des requêtes,Nombre de triplets RDF,Nombre de requêtes,Temps de lecture des données (ms),Temps de lecture des requêtes (ms),Temps création dico (ms),Nombre d'index,Temps de création des index (ms),Temps total d'évaluation du workload (ms),Temps total (du début à la fin du programme) (ms)
+./data/data/500K.nt,./distinctQueries.queryset,529580,6527,3249,579,323,6,971,37,3876
+./data/data/500K.nt,./duplicateQueries.queryset,529580,6527,3233,537,327,6,1035,22,3802
+./data/data/500K.nt,./distinctQueries.queryset,529580,6527,3242,693,327,6,1090,106,4052
+./data/data/500K.nt,./duplicateQueries.queryset,529580,6527,3248,602,344,6,1029,22,3882
+./data/data/500K.nt,./distinctQueries.queryset,529580,6527,3260,609,304,6,1070,60,3941
+./data/data/500K.nt,./duplicateQueries.queryset,529580,6527,3114,541,316,6,973,22,3687
+./data/data/500K.nt,./distinctQueries.queryset,529580,6527,3269,686,366,6,964,112,4077
+./data/data/500K.nt,./duplicateQueries.queryset,529580,6527,3260,544,309,6,953,22,3837
+./data/data/500K.nt,./distinctQueries.queryset,529580,6527,3270,618,460,6,922,43,3940
+./data/data/500K.nt,./duplicateQueries.queryset,529580,6527,3395,625,310,6,1005,36,4067
+./data/data/500K.nt,./distinctQueries.queryset,529580,6527,3369,673,404,6,932,48,4102
+./data/data/500K.nt,./duplicateQueries.queryset,529580,6527,3347,666,338,6,911,37,4059
+./data/data/500K.nt,./distinctQueries.queryset,529580,6527,3456,785,305,6,1062,127,4379
+./data/data/500K.nt,./duplicateQueries.queryset,529580,6527,3337,658,290,6,935,34,4042
+./data/data/500K.nt,./distinctQueries.queryset,529580,6527,3424,675,307,6,1017,64,4174
+./data/data/500K.nt,./duplicateQueries.queryset,529580,6527,3412,620,351,6,933,26,4068
+./data/data/500K.nt,./distinctQueries.queryset,529580,6527,3476,662,337,6,1119,62,4209
+./data/data/500K.nt,./duplicateQueries.queryset,529580,6527,3493,659,336,6,1076,37,4198
+./data/data/500K.nt,./distinctQueries.queryset,529580,6527,3500,815,292,6,1021,118,4445
+./data/data/500K.nt,./duplicateQueries.queryset,529580,6527,3516,752,430,6,1109,35,4315
