@@ -49,6 +49,7 @@ class HeaderAnalyse{
 public class Logger {
 
     public static Logger instance = new Logger();
+    public String moteur;
     public boolean active;
     public String dataPath;
     public String queriesPath;
@@ -218,6 +219,7 @@ public class Logger {
     }
 
     public static void reset() {
+        instance.moteur = "";
         instance.dataTriplets = 0;
         instance.numQueries = 0;
         instance.dataReadTime = 0;

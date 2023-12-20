@@ -71,7 +71,7 @@ public class Main {
                 Logger.instance.setQueriesPath(queriesPath);
                 Logger.instance.setDataPath(dataPath);
                 Logger.instance.setOutputPath(outputPath);
-
+                Logger.instance.moteur = "jena";
                 rdfEngine.runJena();
                 Logger.instance.dump();
                 Logger.reset();
@@ -79,6 +79,7 @@ public class Main {
 
             if (!cmd.hasOption("Jena")) {
                 // Exécuter les requêtes sur notre moteur RDF si pas d'option Jena
+                Logger.instance.moteur = "qengine";
                 Logger.instance.startTime();
                 rdfEngine.run();
             }
