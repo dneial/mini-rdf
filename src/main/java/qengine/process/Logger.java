@@ -5,7 +5,26 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 
+class Header {
+    public static final String datafile = "fichier donnees";
+    public static final String queryfile="fichier requetes";
+    public static final String nb_triplets="nb triplets RDF";
+    public static final String nb_queries="nb requetes";
+    public static final String data_reading_time="tps lecture donnees (ms)";
+    public static final String query_reading_time="tps lecture requetes (ms)";
+    public static final String dico_creation_time="tps creation dico (ms)";
+    public static final String nb_indexes="nb index";
+    public static final String indexes_creation_time="tps creation des index (ms)";
+    public static final String workload_time="tps total workload (ms)";
+    public static final String total_time="Temps total (ms)";
+
+
+    public static final String HEADER = String.format("%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s\n",
+            datafile, queryfile, nb_triplets, nb_queries, data_reading_time, query_reading_time,
+            dico_creation_time, nb_indexes, indexes_creation_time, workload_time, total_time);
+}
 public class Logger {
+
     public static Logger instance = new Logger();
     public boolean active;
     public String dataPath;
@@ -63,11 +82,8 @@ public class Logger {
 
         if (!file.exists()) {
             try (BufferedWriter writer = new BufferedWriter(new FileWriter(outputPath))) {
-                // Écrire l'en-tête CSV
-                writer.write("Nom du fichier de données,Nom du dossier des requêtes,Nombre de triplets RDF," +
-                        "Nombre de requêtes,Temps de lecture des données (ms),Temps de lecture des requêtes (ms)," +
-                        "Temps création dico (ms),Nombre d'index,Temps de création des index (ms)," +
-                        "Temps total d'évaluation du workload (ms),Temps total (du début à la fin du programme) (ms)\n");
+                // Écrire l'en-tete CSV
+                writer.write(Header.HEADER);
 
             } catch (IOException e) {
                 throw new RuntimeException(e);
@@ -131,11 +147,11 @@ public class Logger {
 
         //dump to console
         System.out.println("Nom du fichier de données: " + dataPath);
-        System.out.println("Nom du dossier des requêtes: " + queriesPath);
+        System.out.println("Nom du dossier des requetes: " + queriesPath);
         System.out.println("Nombre de triplets RDF: " + dataTriplets);
-        System.out.println("Nombre de requêtes: " + numQueries);
+        System.out.println("Nombre de requetes: " + numQueries);
         System.out.println("Temps de lecture des données (ms): " + dataReadTime);
-        System.out.println("Temps de lecture des requêtes (ms): " + queriesReadTime);
+        System.out.println("Temps de lecture des requetes (ms): " + queriesReadTime);
         System.out.println("Temps création dico (ms): " + dictCreationTime);
         System.out.println("Nombre d'index: " + numIndexes);
         System.out.println("Temps de création des index (ms): " + indexCreationTime);

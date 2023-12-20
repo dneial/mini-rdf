@@ -175,9 +175,9 @@ public class RDFEngine {
     }
 
     public void printQueryInfo() {
-        System.out.println("Nombre de requêtes : " + queryParser.getQueries().size());
+        System.out.println("Nombre de requetes : " + queryParser.getQueries().size());
         //nombre de requetes doubles
-        System.out.println("Nombre de requêtes dupliquées : " + queryParser.getNumberOfDuplicateQueries());
+        System.out.println("Nombre de requetes dupliquées : " + queryParser.getNumberOfDuplicateQueries());
     }
 
 }
