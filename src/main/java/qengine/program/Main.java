@@ -52,7 +52,6 @@ public class Main {
                     System.err.println("Erreur : le pourcentage doit être un nombre entier.");
                     System.exit(1);
                 }
-
             }
 
             if (cmd.hasOption("query_info")) {
@@ -64,6 +63,18 @@ public class Main {
             if (cmd.hasOption("Jena")) {
                 rdfEngine.runJenaValidation();
                 System.exit(0);
+            }
+
+            if (cmd.hasOption("jena_run")) {
+                Logger.instance.setActive(true);
+                String outputPath = cmd.getOptionValue("jena_run");
+                Logger.instance.setQueriesPath(queriesPath);
+                Logger.instance.setDataPath(dataPath);
+                Logger.instance.setOutputPath(outputPath);
+
+                rdfEngine.runJena();
+                Logger.instance.dump();
+                Logger.reset();
             }
 
             if (!cmd.hasOption("Jena")) {
@@ -115,6 +126,7 @@ public class Main {
         options.addOption("c", "count", false, "Compter le nombre de requêtes vides");
         options.addOption("s", "shuffle", false, "Considère une permutation aléatoire des requêtes");
         options.addOption("qi", "query_info", false, "Affiche des informations sur les requêtes");
+        options.addOption("jc", "jena_run", true, "Exécute les requêtes avec Jena et qengine puis enregistre leurs résultats dans le csv");
         return options;
     }
 
