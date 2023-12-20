@@ -7,8 +7,8 @@ import pandas as pd
 csv_headers = [
     "Nom du template de requete",
     "Nom du fichier de requetes",
-    "Nom du fichier de données",
-    "Nombre de requêtes",
+    "Nom du fichier de donnees",
+    "Nombre de requetes",
     "Nombre de données",
     "Nombre de requetes sans resultats",
 ]
