@@ -89,7 +89,7 @@ public class SearchEngine {
 
     public void displayResults(){
         if (results.isEmpty()) {
-            System.out.println("Empty Object");
+            System.out.println("no results");
             return;
         }
         if (results.values().stream().allMatch(List::isEmpty)) {
