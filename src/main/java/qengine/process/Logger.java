@@ -212,4 +212,8 @@ public class Logger {
     public long getWorkloadTime() {
         return workloadEvalTime;
     }
+
+    public void setNumTriplets(long size) {
+        this.dataTriplets = (int) size;
+    }
 }

@@ -110,11 +110,12 @@ public class RDFEngine {
 
     public void runJena() {
         Logger.instance.startReadDataTime();
-
         Model model = ModelFactory.createDefaultModel();
         // Charger le fichier RDF dans le modèle
         FileManager.get().readModel(model, dataParser.getDataFile());
         Logger.instance.stopReadDataTime();
+
+        Logger.instance.setNumTriplets(model.size());
 
         List<Query> jenaQueries = new ArrayList<>();
 
@@ -125,12 +126,14 @@ public class RDFEngine {
         }
         Logger.instance.stopReadQueriesTime();
 
+        Logger.instance.setNumQueries(jenaQueries.size());
+
         Logger.instance.startWorkloadEvalTime();
         for(Query query : jenaQueries){
             try (QueryExecution qexec = QueryExecutionFactory.create(query, model)) {
                 ResultSet jenaResults = qexec.execSelect();
                 while (jenaResults.hasNext()) {
-                    QuerySolution soln = jenaResults.nextSolution();
+                    jenaResults.nextSolution();
                 }
             } catch (Exception e) {
                 // Gérer l'exception ici
