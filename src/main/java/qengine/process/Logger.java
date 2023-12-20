@@ -23,6 +23,7 @@ class Header {
             datafile, queryfile, nb_triplets, nb_queries, data_reading_time, query_reading_time,
             dico_creation_time, nb_indexes, indexes_creation_time, workload_time, total_time);
 }
+
 public class Logger {
 
     public static Logger instance = new Logger();
@@ -142,6 +143,7 @@ public class Logger {
 
     public void dump() {
         //write to file
+        if (!active) return;
         log(dataPath, queriesPath, dataTriplets, numQueries, dataReadTime, queriesReadTime, dictCreationTime,
                 numIndexes, indexCreationTime, workloadEvalTime, totalTime, outputPath);
 

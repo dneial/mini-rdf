@@ -15,14 +15,6 @@ public class Main {
             String queriesPath = cmd.getOptionValue("queries");
             String dataPath = cmd.getOptionValue("data");
 
-            if (cmd.hasOption("count")) {
-                // Compter le nombre de requêtes vides
-                Logger.instance.setActive(false);
-                RDFEngine rdfEngine = new RDFEngine(dataPath, queriesPath);
-                rdfEngine.load();
-                System.out.println(rdfEngine.runCount());
-                System.exit(0);
-            }
 
             if (cmd.hasOption("output")) {
                 // Activer le logger
@@ -33,19 +25,14 @@ public class Main {
                 Logger.instance.setOutputPath(outputPath);
                 Logger.instance.startTime();
             }
+
             RDFEngine rdfEngine = new RDFEngine(dataPath, queriesPath);
             rdfEngine.load();
 
-
-            if (cmd.hasOption("query_info")) {
-                // Afficher des informations sur les requêtes
-                rdfEngine.printQueryInfo();
-            }
-
-            // Traitement des options
-            if (cmd.hasOption("Jena")) {
-                rdfEngine.runJenaValidation();
-                System.exit(0);
+            if (cmd.hasOption("shuffle")) {
+                System.out.println("everyday im shuffling");
+                // Considérer une permutation aléatoire des requêtes
+                rdfEngine.shuffle();
             }
 
             if (cmd.hasOption("warm")) {
@@ -70,15 +57,26 @@ public class Main {
                 }
             }
 
-            if (cmd.hasOption("shuffle")) {
-                // Considérer une permutation aléatoire des requêtes
-                rdfEngine.shuffle();
+            if (cmd.hasOption("query_info")) {
+                // Afficher des informations sur les requêtes
+                rdfEngine.printQueryInfo();
             }
 
+            // Traitement des options
+            if (cmd.hasOption("Jena")) {
+                rdfEngine.runJenaValidation();
+                System.exit(0);
+            }
 
             if (!cmd.hasOption("Jena")) {
                 // Exécuter les requêtes sur notre moteur RDF si pas d'option Jena
                 rdfEngine.run();
+            }
+
+            if (cmd.hasOption("count")) {
+                // Compter le nombre de requêtes vides
+                Logger.instance.setActive(false);
+                System.out.println(rdfEngine.countEmptyQueries());
             }
 
             Logger.instance.stopTotalTime();

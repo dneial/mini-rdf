@@ -180,4 +180,8 @@ public class RDFEngine {
         System.out.println("Nombre de requetes dupliquées : " + queryParser.getNumberOfDuplicateQueries());
     }
 
+    public int countEmptyQueries() {
+        return searchEngine.emptyQueries;
+    }
+
 }
