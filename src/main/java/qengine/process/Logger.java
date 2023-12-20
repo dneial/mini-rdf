@@ -213,10 +213,10 @@ public class Logger {
         return workloadEvalTime;
     }
 
-<<<<<<< HEAD
     public void setNumTriplets(long size) {
         this.dataTriplets = (int) size;
-=======
+    }
+
     public static void reset() {
         instance.dataTriplets = 0;
         instance.numQueries = 0;
@@ -228,6 +228,5 @@ public class Logger {
         instance.workloadEvalTime = 0;
         instance.startTime = 0;
         instance.totalTime = 0;
->>>>>>> origin/master
     }
 }
