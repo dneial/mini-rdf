@@ -134,3 +134,17 @@ On remarque :
             pas de doublons
             peu de requetes sans resultats
             on garde quand même les Q4 pour avoir de la variété
+
+
+
+
+    TDOD
+        récupérer specs de la machine (cf diapo 25)
+        écrire protocole de lanchement de benchmark
+
+        lancer benchmark sur machines en variant :
+            mémoire allouée
+            OS
+            data set
+
+        analyser les résultats
