@@ -116,22 +116,22 @@ public class Logger {
     }
 
 
-    public void log(String dataPath, String queriesPath, int dataTriplets, int numQueries,
+    public void log(String moteur, String dataPath, String queriesPath, int dataTriplets, int numQueries,
                     long dataReadTime, long queriesReadTime, long dictCreationTime, int numIndexes,
                     long indexCreationTime, long workloadEvalTime, long totalTime, String outputPath) {
         if (active) {
-            exportToCSV(dataPath, queriesPath, dataTriplets, numQueries, dataReadTime, queriesReadTime,
+            exportToCSV(moteur, dataPath, queriesPath, dataTriplets, numQueries, dataReadTime, queriesReadTime,
                     dictCreationTime, numIndexes, indexCreationTime, workloadEvalTime, totalTime, outputPath);
         }
     }
 
-    private static void exportToCSV(String dataPath, String queriesPath, int dataTriplets, int numQueries,
+    private static void exportToCSV(String moteur, String dataPath, String queriesPath, int dataTriplets, int numQueries,
                                     long dataReadTime, long queriesReadTime, long dictCreationTime, int numIndexes,
                                     long indexCreationTime, long workloadEvalTime, long totalTime, String outputPath) {
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(outputPath, true))) {
             // Écrire la ligne de données CSV
-            writer.write(String.format("%s,%s,%d,%d,%d,%d,%d,%d,%d,%d,%d\n",
-                    dataPath, queriesPath, dataTriplets, numQueries, dataReadTime, queriesReadTime,
+            writer.write(String.format("%s,%s,%s,%d,%d,%d,%d,%d,%d,%d,%d,%d\n",
+                    moteur, dataPath, queriesPath, dataTriplets, numQueries, dataReadTime, queriesReadTime,
                     dictCreationTime, numIndexes, indexCreationTime, workloadEvalTime, totalTime));
         } catch (IOException e) {
             e.printStackTrace();
@@ -167,7 +167,7 @@ public class Logger {
     public void dump() {
         //write to file
         if (!active) return;
-        log(dataPath, queriesPath, dataTriplets, numQueries, dataReadTime, queriesReadTime, dictCreationTime,
+        log(moteur, dataPath, queriesPath, dataTriplets, numQueries, dataReadTime, queriesReadTime, dictCreationTime,
                 numIndexes, indexCreationTime, workloadEvalTime, totalTime, outputPath);
 
         //dump to console

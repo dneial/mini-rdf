@@ -2,12 +2,12 @@ import os
 import subprocess
 
 
-### éléments à varier lors des expériences :
-###     moteur (Jena, RDFEngine)
-###     mémoire allouée (heap space : -Xmx(n)g avec n = 2, 4, 8)
-###     data set (500k.nt ou 2M.nt)
+# éléments à varier lors des expériences :
+#     moteur (Jena, RDFEngine)
+#     mémoire allouée (heap space : -Xmx(n)g avec n = 2, 4, 8)
+#     data set (500k.nt ou 2M.nt)
 
-### total : 12 expériences possibles
+# total : 12 expériences possibles
 
 memories = [2, 4, 8]
 dataset = ["500K.nt", "2M.nt"]
@@ -34,7 +34,7 @@ def execute_java_program(data_file, memory):
 
 def execute_jena_program(data_file, memory):
     command = [
-        "/home/e20170009949/.jdks/openjdk-21.0.1/bin/java",
+        "java",
         f"-Xmx{memory}g",
         "-jar",
         "RDFEngine.jar",
@@ -42,7 +42,7 @@ def execute_jena_program(data_file, memory):
         querypath,
         "-d",
         data_file,
-        "-jc",
+        "-jr",
         "output/bench/",
     ]
     subprocess.run(command)
@@ -52,10 +52,7 @@ def execute_jena_program(data_file, memory):
 def run():
     for m in memories:
         for d in dataset:
-            #             print(f"\nexecution sur RDFEngine avec {m}g et {d}\n")
-            #             execute_java_program(f"./data/data/{d}", m)
-
-            print(f"\nexecution sur RDFEngine avec {m}G de Heap Space et {d}\n")
+            print(f"\nexecution sur RDFEngine avec {m}g de Heap Space et {d}\n")
             execute_jena_program(f"./data/data/{d}", m)
 
 

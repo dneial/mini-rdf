@@ -66,6 +66,7 @@ public class Main {
             }
 
             if (cmd.hasOption("jena_run")) {
+                System.out.println("jena run");
                 Logger.instance.setActive(true);
                 String outputPath = cmd.getOptionValue("jena_run");
                 Logger.instance.setQueriesPath(queriesPath);
@@ -127,7 +128,7 @@ public class Main {
         options.addOption("c", "count", false, "Compter le nombre de requêtes vides");
         options.addOption("s", "shuffle", false, "Considère une permutation aléatoire des requêtes");
         options.addOption("qi", "query_info", false, "Affiche des informations sur les requêtes");
-        options.addOption("jc", "jena_run", true, "Exécute les requêtes avec Jena et qengine puis enregistre leurs résultats dans le csv");
+        options.addOption("jr", "jena_run", true, "Exécute les requêtes avec Jena et qengine puis enregistre leurs résultats dans le csv");
         return options;
     }
 
