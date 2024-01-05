@@ -4,7 +4,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 
 
-#recupérer les entêtes : une par ligne dans defs/CSV_HEADER
+#recuperer les entêtes : une par ligne dans defs/CSV_HEADER
 header = []
 with open("defs/CSV_HEADER", "r") as f:
     for line in f:
@@ -25,46 +25,45 @@ workloadTime_H   = header[11]
 totalTime_H      = header[12]
 
 
-#recupérer les données
-data = pd.read_csv("output/bench/time_monitoring.csv", sep=",", header=None, names=header).head(5)
+#recuperer les donnees
+data = pd.read_csv("output/bench/time_monitoring.csv", sep=",", header=None, names=header)
+data['temps de lecture'] = data[dataReadTime_H] + data[queryReadTime_H]
+
+# Creation du groupe "sex", et decompte des individus de chaque sous-grouê (male, female)
+g = data.groupby([memoire_H,dataFile_H])
+# print(g.groups)
+
+g1 = g.get_group(('2', './data/data/500K.nt'))
+g2 = g.get_group(('2', './data/data/2M.nt'))
+g3 = g.get_group(('4', './data/data/500K.nt'))
+g4 = g.get_group(('4', './data/data/2M.nt'))
+
+# categories
+# tmps lecture
+# tmps workload
+# tmps total
 
 
-# Définir les scénarios
-scenarios = [
-    {"donnees": 500000, "memoire": 2},
-    {"donnees": 500000, "memoire": 4},
-    {"donnees": 500000, "memoire": 8},
-    {"donnees": 2000000, "memoire": 2},
-    {"donnees": 2000000, "memoire": 4},
-    {"donnees": 2000000, "memoire": 8},
-]
+# On extrait les noms des differents hairpattern et des differents sexes
+categories = ['temps de lecture des requêtes', 'temps d\'évalutaion du workload', 'temps total']
+moteur = data[moteur_H].value_counts().index
+pos = np.arange(len(categories))
+width = 0.35  # epaisseur de chaque bâton
 
-# Créer un diagramme avec trois sous-graphes
-fig, axs = plt.subplots(3, 1, figsize=(10, 18))
+# données
+qenginedata = g1.groupby(moteur_H).get_group('qengine')[[queryReadTime_H,workloadTime_H,totalTime_H]]
+jenadata = g1.groupby(moteur_H).get_group('jena')[[queryReadTime_H,workloadTime_H,totalTime_H]]
 
-# Titre du diagramme
-fig.suptitle("Comparaison Jena et Moteur-rdf", fontsize=16)
+qenginedata = qenginedata.transpose().squeeze().astype('int32')
+jenadata = jenadata.transpose().squeeze().astype('int32')
 
-categories = [dataReadTime_H, workloadTime_H, totalTime_H]
+print(jenadata)
+print(qenginedata)
 
-for i, category in enumerate(categories):
-    # Barres pour Jena
-    jena_values = data[data["moteur"] == "Jena"][category]
-    axs[i].bar(np.arange(len(jena_values)) - 0.2, jena_values, width=0.4, label="Jena")
-
-    # Barres pour Moteur-rdf
-    moteur_rdf_values = data[data["moteur"] == "Moteur-rdf"][category]
-    axs[i].bar(np.arange(len(moteur_rdf_values)) + 0.2, moteur_rdf_values, width=0.4, label="Moteur-rdf")
-
-    # Réglages des axes
-    axs[i].set_title(f"{category}")
-    axs[i].set_xlabel("Moteur")
-    axs[i].set_ylabel("Temps (ms)")
-    axs[i].set_xticks(np.arange(len(data["moteur"])))
-    axs[i].set_xticklabels(data["moteur"])
-    axs[i].legend()
-
-# Ajustements de la mise en page
-plt.tight_layout(rect=[0, 0, 1, 0.96])
+# Creation du diagramme en bâtons (bâtons côte à côte)
+plt.bar(pos - width/2, qenginedata, width, color='IndianRed')
+plt.bar(pos + width/2, jenadata, width, color='SkyBlue')
+plt.xticks(pos, categories)
+plt.title('comparaison des temps d\'executions des moteurs pour 500K données et 2G de mémoire',fontsize=15)
+plt.legend(moteur,loc=1)
 plt.show()
-

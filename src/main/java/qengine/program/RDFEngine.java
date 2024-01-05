@@ -115,9 +115,10 @@ public class RDFEngine {
 
         List<Query> jenaQueries = new ArrayList<>();
 
+        List<String> strQueries = queryParser.getStrQueries();
         Logger.instance.startReadQueriesTime();
         // pour chaque requête du fichier de requêtes
-        for (String query : queryParser.getStrQueries()) {
+        for (String query : strQueries) {
             jenaQueries.add(QueryFactory.create(query));
         }
         Logger.instance.stopReadQueriesTime();

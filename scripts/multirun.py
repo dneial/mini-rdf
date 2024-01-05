@@ -9,7 +9,7 @@ import subprocess
 
 # total : 12 expériences possibles
 
-memories = [2, 4, 8]
+memories = [2, 4]
 dataset = ["500K.nt", "2M.nt"]
 querypath = "./data/queries/benchmark.queryset"
 
