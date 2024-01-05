@@ -58,7 +58,7 @@ def maven_build():
     return
 
 def run():
-    # maven_build()
+    maven_build()
     for m in memories:
         for d in dataset:
             print(f"\nexecution sur RDFEngine avec {m}G de Heap Space et {d} de données\n")

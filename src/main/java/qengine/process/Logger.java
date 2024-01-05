@@ -207,9 +207,9 @@ public class Logger {
                 csvWriter.append("\n");
             }
 
-            System.out.println(String.format("%s,%s,%s,%d,%d,%d,%d,%d,%d,%d,%d,%d\n",
-                    moteur, dataPath, queriesPath, dataTriplets, numQueries, dataReadTime, queriesReadTime,
-                    dictCreationTime, numIndexes, indexCreationTime, workloadEvalTime, totalTime));
+//            System.out.println(String.format("%s,%s,%s,%d,%d,%d,%d,%d,%d,%d,%d,%d\n",
+//                    moteur, dataPath, queriesPath, dataTriplets, numQueries, dataReadTime, queriesReadTime,
+//                    dictCreationTime, numIndexes, indexCreationTime, workloadEvalTime, totalTime));
 
             csvWriter.write(String.format("%s,%s,%s,%d,%d,%d,%d,%d,%d,%d,%d,%d\n",
                     moteur, dataPath, queriesPath, dataTriplets, numQueries, dataReadTime, queriesReadTime,

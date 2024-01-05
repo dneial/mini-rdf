@@ -42,10 +42,6 @@ public class RDFEngine {
         this.queryParser.parseQueries();
     }
 
-    public void loadData() throws Exception {
-        this.searchEngine.initData(this.dataParser);
-    }
-
     public void loadQueries(String queriesPath) throws Exception {
         this.queryParser.parseQueries(queriesPath);
     }
@@ -109,8 +105,8 @@ public class RDFEngine {
     }
 
     public void runJena() {
-        Logger.instance.startReadDataTime();
         Model model = ModelFactory.createDefaultModel();
+        Logger.instance.startReadDataTime();
         // Charger le fichier RDF dans le modèle
         FileManager.get().readModel(model, dataParser.getDataFile());
         Logger.instance.stopReadDataTime();

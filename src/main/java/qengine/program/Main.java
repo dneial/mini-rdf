@@ -29,64 +29,67 @@ public class Main {
                     String outputPath = cmd.getOptionValue("jena_run");
                     Logger.instance.setOutputPath(outputPath);
                 }
+                Logger.instance.startTime();
             }
-
 
             RDFEngine rdfEngine = new RDFEngine(dataPath, queriesPath);
-            rdfEngine.load();
 
-            if (cmd.hasOption("shuffle")) {
-                // Considérer une permutation aléatoire des requêtes
-                rdfEngine.shuffle();
-            }
-
-            if (cmd.hasOption("warm")) {
-
-                // Utiliser un échantillon de requêtes correspondant au pourcentage "X"
-                String warmPercentage = cmd.getOptionValue("warm");
-
-                // Vérifier que le pourcentage est valide
-                try {
-                    int percentage = Integer.parseInt(warmPercentage);
-                    if (percentage < 0 || percentage > 100) {
-                        System.err.println("Erreur : le pourcentage doit être compris entre 0 et 100.");
-                        System.exit(1);
-                    }
-
-                   // System.out.println("Warming up avec " + warmPercentage + "% des requêtes");
-                    rdfEngine.warmup(percentage);
-
-                } catch (NumberFormatException e) {
-                    System.err.println("Erreur : le pourcentage doit être un nombre entier.");
-                    System.exit(1);
-                }
-            }
-
-            if (cmd.hasOption("query_info")) {
-                // Afficher des informations sur les requêtes
-                rdfEngine.printQueryInfo();
-            }
-
-            // Traitement des options
-            if (cmd.hasOption("Jena")) {
-                rdfEngine.runJenaValidation();
-                System.exit(0);
-            }
+            //si jena_run on ne doit pas charger notre rdf Engine
+            //ça va fausser les temps de jena sinon
 
             if (cmd.hasOption("jena_run")) {
-               // Exécuter les requêtes sur Jena
+                // Exécuter les requêtes sur Jena
                 Logger.instance.moteur = "jena";
-                Logger.instance.startTime();
+
                 rdfEngine.runJena();
-            }
 
-            if (!cmd.hasOption("Jena") && !cmd.hasOption("jena_run")) {
-                // Exécuter les requêtes sur notre moteur RDF si pas d'option Jena
-                Logger.instance.moteur = "qengine";
-                Logger.instance.startTime();
-                rdfEngine.run();
-            }
+            }else {
+                rdfEngine.load();
 
+                if (cmd.hasOption("shuffle")) {
+                    // Considérer une permutation aléatoire des requêtes
+                    rdfEngine.shuffle();
+                }
+
+                if (cmd.hasOption("warm")) {
+
+                    // Utiliser un échantillon de requêtes correspondant au pourcentage "X"
+                    String warmPercentage = cmd.getOptionValue("warm");
+
+                    // Vérifier que le pourcentage est valide
+                    try {
+                        int percentage = Integer.parseInt(warmPercentage);
+                        if (percentage < 0 || percentage > 100) {
+                            System.err.println("Erreur : le pourcentage doit être compris entre 0 et 100.");
+                            System.exit(1);
+                        }
+
+                        // System.out.println("Warming up avec " + warmPercentage + "% des requêtes");
+                        rdfEngine.warmup(percentage);
+
+                    } catch (NumberFormatException e) {
+                        System.err.println("Erreur : le pourcentage doit être un nombre entier.");
+                        System.exit(1);
+                    }
+                }
+
+                if (cmd.hasOption("query_info")) {
+                    // Afficher des informations sur les requêtes
+                    rdfEngine.printQueryInfo();
+                }
+
+                // Traitement des options
+                if (cmd.hasOption("Jena")) {
+                    rdfEngine.runJenaValidation();
+                    System.exit(0);
+                }
+
+                if (!cmd.hasOption("Jena")) {
+                    // Exécuter les requêtes sur notre moteur RDF si pas d'option Jena
+                    Logger.instance.moteur = "qengine";
+                    rdfEngine.run();
+                }
+            }
             if (cmd.hasOption("count")) {
                 // Compter le nombre de requêtes vides
                 Logger.instance.setActive(false);

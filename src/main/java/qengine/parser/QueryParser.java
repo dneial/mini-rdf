@@ -11,14 +11,15 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
 import java.util.stream.Stream;
 
 public class QueryParser {
 
     private String baseURI;
     private String queryFile;
-    public Logger log;
     private List<List<StatementPattern>> queries;
 
 
@@ -31,37 +32,74 @@ public class QueryParser {
 
 
     public List<String> getStrQueries() {
+//        List<String> strqueries = new ArrayList<>();
+//        for(List<StatementPattern> q: queries) {
+//            StringBuilder strquery = new StringBuilder();
+//            strquery.append("SELECT ?v0 WHERE {\n");
+//            for(StatementPattern sp: q) {
+//                //nt format
+//                strquery
+//                    .append("\t")
+//                    .append("?")
+//                    .append(sp.getSubjectVar().getName())
+//                    .append("\t<")
+//                    .append(sp.getPredicateVar().getValue())
+//                    .append(">\t<")
+//                    .append(sp.getObjectVar().getValue())
+//                    .append(">");
+//                if(q.indexOf(sp) != q.size()-1) strquery.append(" .\n");
+//            }
+//            strquery.append(" }");
+//            strqueries.add(strquery.toString());
+//        }
+//        return strqueries;
+
+
+        if (queryFile == null || queryFile.isEmpty())
+            return null;
+
         List<String> strqueries = new ArrayList<>();
-        for(List<StatementPattern> q: queries) {
-            StringBuilder strquery = new StringBuilder();
-            strquery.append("SELECT ?v0 WHERE {\n");
-            for(StatementPattern sp: q) {
-                //nt format
-                strquery
-                    .append("\t")
-                    .append("?")
-                    .append(sp.getSubjectVar().getName())
-                    .append("\t<")
-                    .append(sp.getPredicateVar().getValue())
-                    .append(">\t<")
-                    .append(sp.getObjectVar().getValue())
-                    .append(">");
-                if(q.indexOf(sp) != q.size()-1) strquery.append(" .\n");
+        //split file into queries that starts with 'SELECT' and ends with '}'
+
+        try (Stream<String> lines = Files.lines(Paths.get(queryFile))) {
+            StringBuilder queryBuilder = new StringBuilder();
+            boolean insideQuery = false;
+
+            for (String line : lines.toList()) {
+                //if line is empty, skip it
+                if (line.trim().isEmpty()) continue;
+
+                // Check if the line starts with 'SELECT'
+                if (line.trim().toUpperCase().startsWith("SELECT")) {
+                    queryBuilder.append(line).append("\n");
+                    insideQuery = true;
+                } else if (insideQuery) {
+                    // Continue reading lines until '}' is encountered
+                    queryBuilder.append(line).append("\n");
+
+                    if (line.trim().endsWith("}")) {
+                        // Add the extracted query to the list
+                        strqueries.add(queryBuilder.toString().trim());
+                        queryBuilder.setLength(0); // Reset the StringBuilder for the next query
+                        insideQuery = false;
+                    }
+                }
             }
-            strquery.append(" }");
-            strqueries.add(strquery.toString());
+        } catch (IOException e) {
+            e.printStackTrace(); // Handle or log the exception as needed
         }
+
         return strqueries;
     }
 
-    public List<List<StatementPattern>> parseQueries(String queryPath) throws FileNotFoundException, IOException {
+    public List<List<StatementPattern>> parseQueries(String queryPath) throws IOException {
 
         this.queryFile = queryPath;
 
         return parseQueries();
     }
 
-    public List<List<StatementPattern>> parseQueries() throws FileNotFoundException, IOException {
+    public List<List<StatementPattern>> parseQueries() throws IOException {
         /*
          * On utilise un stream pour lire les lignes une par une, sans avoir à toutes les stocker
          * entièrement dans une collection.
@@ -107,7 +145,7 @@ public class QueryParser {
 
         return StatementPatternCollector.process(query.getTupleExpr());
     }
-    
+
     public List<List<StatementPattern>> getQueries() {
         return queries;
     }
@@ -128,8 +166,8 @@ public class QueryParser {
     // et un autre avec une seule requête dupliquée assez de fois pour avoir la même taille que le premier
     public void writeDistinctBench() throws IOException {
 
-        List<String> strQueries = getStrQueries();
-        
+        //List<String> strQueries = getStrQueries();
+
         queries = queries.stream().distinct().toList();
 
         System.out.println("Number of distinct queries : " + queries.size());
@@ -143,7 +181,7 @@ public class QueryParser {
         this.queries = newQueries;
     }
 
-    public static void main(String[] args) throws FileNotFoundException, IOException{
+    public static void main(String[] args) throws IOException{
         QueryParser qp = new QueryParser(null, "data/queries/100/Q_4_location_nationality_gender_type_100.queryset");
         qp.parseQueries();
 
