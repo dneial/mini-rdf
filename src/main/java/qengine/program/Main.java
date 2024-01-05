@@ -16,13 +16,21 @@ public class Main {
             String dataPath = cmd.getOptionValue("data");
 
 
-            if (cmd.hasOption("output")) {
+            if (cmd.hasOption("output") || cmd.hasOption("jena_run") ) {
                 Logger.instance.setActive(true);
-                String outputPath = cmd.getOptionValue("output");
                 Logger.instance.setQueriesPath(queriesPath);
                 Logger.instance.setDataPath(dataPath);
-                Logger.instance.setOutputPath(outputPath);
+
+                if (cmd.hasOption("output") ) {
+                    String outputPath = cmd.getOptionValue("output");
+                    Logger.instance.setOutputPath(outputPath);
+                }
+                if (cmd.hasOption("jena_run") ) {
+                    String outputPath = cmd.getOptionValue("jena_run");
+                    Logger.instance.setOutputPath(outputPath);
+                }
             }
+
 
             RDFEngine rdfEngine = new RDFEngine(dataPath, queriesPath);
             rdfEngine.load();
@@ -66,19 +74,13 @@ public class Main {
             }
 
             if (cmd.hasOption("jena_run")) {
-                System.out.println("jena run");
-                Logger.instance.setActive(true);
-                String outputPath = cmd.getOptionValue("jena_run");
-                Logger.instance.setQueriesPath(queriesPath);
-                Logger.instance.setDataPath(dataPath);
-                Logger.instance.setOutputPath(outputPath);
+               // Exécuter les requêtes sur Jena
                 Logger.instance.moteur = "jena";
+                Logger.instance.startTime();
                 rdfEngine.runJena();
-                Logger.instance.dump();
-                Logger.reset();
             }
 
-            if (!cmd.hasOption("Jena")) {
+            if (!cmd.hasOption("Jena") && !cmd.hasOption("jena_run")) {
                 // Exécuter les requêtes sur notre moteur RDF si pas d'option Jena
                 Logger.instance.moteur = "qengine";
                 Logger.instance.startTime();

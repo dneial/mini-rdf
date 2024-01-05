@@ -48,13 +48,27 @@ def execute_jena_program(data_file, memory):
     subprocess.run(command)
     return
 
+def maven_build():
+    command = [
+        "mvn",
+        "clean",
+        "package",
+    ]
+    subprocess.run(command)
+    return
 
 def run():
+    # maven_build()
     for m in memories:
         for d in dataset:
-            print(f"\nexecution sur RDFEngine avec {m}g de Heap Space et {d}\n")
+            print(f"\nexecution sur RDFEngine avec {m}G de Heap Space et {d} de données\n")
+            execute_java_program(f"./data/data/{d}", m)
+
+            print(f"\nexecution sur Jena avec {m}G de Heap Space et {d} de données\n")
             execute_jena_program(f"./data/data/{d}", m)
 
 
 if __name__ == "__main__":
     run()
+
+

@@ -4,6 +4,7 @@ import qengine.parser.QueryParser;
 import qengine.program.RDFEngine;
 
 import java.io.BufferedWriter;
+import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -15,9 +16,12 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
 
+import static qengine.process.Logger.readHeader;
+
 public class Analyzer {
     public Path dataPath = Paths.get("data/data/2M.nt");
     public Path templatePath = Paths.get("data/queries/10000");
+    public Path outputPath = Paths.get("output/analyse/analyse.csv");
 
     public void analyseTemp() throws Exception {
 
@@ -61,8 +65,8 @@ public class Analyzer {
                     //execute les requetes
                     rdfEngine.run();
                     //recupere les infos
-                    tmpslecture.get(tempFile).add(Logger.instance.getReadQueriesTime());
-                    tmpsreponse.get(tempFile).add(Logger.instance.getWorkloadTime());
+                    tmpslecture.get(tempFile).add(Logger.instance.queriesReadTime);
+                    tmpsreponse.get(tempFile).add(Logger.instance.workloadEvalTime);
 
                     //metre les infos une seule fois
                     if (infos.get(path.getFileName().toString()) == null) {
@@ -84,17 +88,26 @@ public class Analyzer {
 
         //ecrire les infos dans un CSV
         StringBuilder sb = new StringBuilder();
-        sb.append(HeaderAnalyse.HEADER);
-        for (String key : infos.keySet()) {
-            sb.append(key).append(",");
-            sb.append(tmpslecture.get(key).stream().mapToLong(Long::longValue).sum() / tmpslecture.get(key).size()).append(",");
-            sb.append(tmpsreponse.get(key).stream().mapToLong(Long::longValue).sum() / tmpsreponse.get(key).size()).append(",");
-            sb.append(infos.get(key)[0]).append(",");
-            sb.append(infos.get(key)[1]).append(",");
-            sb.append(infos.get(key)[2]).append(",");
-            sb.append(infos.get(key)[3]).append("\n");
-        }
+        List<String> headers = readHeader(2);
+        sb.append(String.format("%s,%s,%s,%s,%s,%s,%s\n",
+                headers.get(0),
+                headers.get(1),
+                headers.get(2),
+                headers.get(3),
+                headers.get(4),
+                headers.get(5),
+                headers.get(6)));
 
+        for (String key : infos.keySet()) {
+            sb.append(String.format("%s,%d,%d,%d,%d,%d,%d\n",
+                    key,
+                    tmpslecture.get(key).stream().mapToLong(Long::longValue).sum() / tmpslecture.get(key).size(),
+                    tmpsreponse.get(key).stream().mapToLong(Long::longValue).sum() / tmpsreponse.get(key).size(),
+                    infos.get(key)[0],
+                    infos.get(key)[1],
+                    infos.get(key)[2],
+                    infos.get(key)[3]));
+        }
         try (BufferedWriter writer = new BufferedWriter(new FileWriter("output/analyse/analyse.csv", false))) {
             // Écrire la ligne de données CSV
             writer.write(sb.toString());
@@ -126,7 +139,6 @@ public class Analyzer {
     }
 
     public static void main(String[] args) throws Exception {
-
 
         Analyzer analyzer = new Analyzer();
 //        analyzer.analyseTemp();

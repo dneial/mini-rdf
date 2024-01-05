@@ -148,3 +148,10 @@ On remarque :
             data set
 
         analyser les résultats
+
+
+PROTOCOLE BENCHMARK :
+
+
+ - lancer moteur sur 500K et 2M avec benchmark.queryset
+ -

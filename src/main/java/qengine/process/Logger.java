@@ -1,56 +1,23 @@
 package qengine.process;
 
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
+import java.io.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Scanner;
 
-class Header {
-    public static final String moteur = "moteur";
-    public static final String datafile = "fichier donnees";
-    public static final String queryfile = "fichier requetes";
-    public static final String nb_triplets = "nb triplets RDF";
-    public static final String nb_queries = "nb requetes";
-    public static final String data_reading_time = "tps lecture donnees (ms)";
-    public static final String query_reading_time = "tps lecture requetes (ms)";
-    public static final String dico_creation_time = "tps creation dico (ms)";
-    public static final String nb_indexes = "nb index";
-    public static final String indexes_creation_time = "tps creation des index (ms)";
-    public static final String workload_time = "tps total workload (ms)";
-    public static final String total_time = "Temps total (ms)";
-
-
-    public static final String HEADER = String.format("%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s\n",
-            moteur, datafile, queryfile, nb_triplets, nb_queries, data_reading_time, query_reading_time,
-            dico_creation_time, nb_indexes, indexes_creation_time, workload_time, total_time);
-}
-
-
-class HeaderAnalyse{
-//  - le temps de lecture moyen des requetes
-//  - le temps de réponse moyen de chaque pattern
-//  - le nombre de requetes dans le fichier
-//  - le nombre de doublons dans le fichier
-//  - le nombre d' uniques dans le fichier
-//  - le nombre de requetes sans resultats
-
-    public static final String queryfile="template";
-    public static final String avgreq="tmps lecture moyen requetes";
-    public static final String avgpat="tmps reponse moyen pattern";
-    public static final String nbreq="nb requetes";
-    public static final String nbdouble="nb doublons";
-    public static final String nbunique="nb uniques";
-    public static final String nbreqsansresult="nb requetes sans resultats";
-
-    public static final String HEADER = String.format("%s,%s,%s,%s,%s,%s,%s\n",
-            queryfile, avgreq, avgpat, nbreq, nbdouble, nbunique, nbreqsansresult);
-
-}
 public class Logger {
 
+    //Singleton
     public static Logger instance = new Logger();
-    public String moteur;
+
+    //if Logger is in use
     public boolean active;
+
+    //header for the csv
+    public List<String> HEADER;
+
+    //data to log
+    public String moteur;
     public String dataPath;
     public String queriesPath;
     public int dataTriplets;
@@ -61,18 +28,22 @@ public class Logger {
     public int numIndexes = 6;
     public long indexCreationTime;
     public long workloadEvalTime;
-    public long startTime;
     public long totalTime;
+
+    //computing attributes
+    public long startTime;
     public String outputPath;
     private long dictLapTime = 0;
     private long hexaLapTime = 0;
 
+    //Setters
     private Logger() {
         this.active = false;
     }
 
     public void setActive(boolean active) {
         this.active = active;
+        this.HEADER = readHeader(1);
     }
 
     public void setDataPath(String dataPath) {
@@ -83,12 +54,12 @@ public class Logger {
         this.queriesPath = queriesPath;
     }
 
-    public void setNumQueries(int numQueries) {
-        this.numQueries = numQueries;
+    public void setNumTriplets(long size) {
+        this.dataTriplets = (int) size;
     }
 
-    public void startTime() {
-        this.startTime = System.currentTimeMillis();
+    public void setNumQueries(int numQueries) {
+        this.numQueries = numQueries;
     }
 
     public void setOutputPath(String directoryPath) {
@@ -107,7 +78,11 @@ public class Logger {
         if (!file.exists()) {
             try (BufferedWriter writer = new BufferedWriter(new FileWriter(outputPath))) {
                 // Écrire l'en-tete CSV
-                writer.write(Header.HEADER);
+                writer.write(String.format("%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s\n",
+                        this.HEADER.get(0), this.HEADER.get(1), this.HEADER.get(2), this.HEADER.get(3),
+                        this.HEADER.get(4), this.HEADER.get(5), this.HEADER.get(6), this.HEADER.get(7),
+                        this.HEADER.get(8), this.HEADER.get(9), this.HEADER.get(10), this.HEADER.get(11)
+                ));
 
             } catch (IOException e) {
                 throw new RuntimeException(e);
@@ -115,76 +90,23 @@ public class Logger {
         }
     }
 
-
-    public void log(String moteur, String dataPath, String queriesPath, int dataTriplets, int numQueries,
-                    long dataReadTime, long queriesReadTime, long dictCreationTime, int numIndexes,
-                    long indexCreationTime, long workloadEvalTime, long totalTime, String outputPath) {
-        if (active) {
-            exportToCSV(moteur, dataPath, queriesPath, dataTriplets, numQueries, dataReadTime, queriesReadTime,
-                    dictCreationTime, numIndexes, indexCreationTime, workloadEvalTime, totalTime, outputPath);
-        }
+    public void countRdfTriple() {
+        this.dataTriplets++;
     }
 
-    private static void exportToCSV(String moteur, String dataPath, String queriesPath, int dataTriplets, int numQueries,
-                                    long dataReadTime, long queriesReadTime, long dictCreationTime, int numIndexes,
-                                    long indexCreationTime, long workloadEvalTime, long totalTime, String outputPath) {
-        try (BufferedWriter writer = new BufferedWriter(new FileWriter(outputPath, true))) {
-            // Écrire la ligne de données CSV
-            writer.write(String.format("%s,%s,%s,%d,%d,%d,%d,%d,%d,%d,%d,%d\n",
-                    moteur, dataPath, queriesPath, dataTriplets, numQueries, dataReadTime, queriesReadTime,
-                    dictCreationTime, numIndexes, indexCreationTime, workloadEvalTime, totalTime));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+    //time methods
+    public void startTime() {
+        this.startTime = System.currentTimeMillis();
+    }
+    public void stopTotalTime() {
+        this.totalTime = System.currentTimeMillis() - this.startTime;
     }
 
     public void startReadDataTime() {
         this.dataReadTime = System.currentTimeMillis();
     }
-
     public void stopReadDataTime() {
         this.dataReadTime = System.currentTimeMillis() - this.dataReadTime;
-    }
-
-    public void dicoCreateLapStart() {
-        this.dictLapTime = System.currentTimeMillis();
-    }
-
-    public void dicoCreateLapEnd() {
-        this.dictLapTime = System.currentTimeMillis() - this.dictLapTime;
-        this.dictCreationTime += this.dictLapTime;
-    }
-
-    public void hexaCreateLapStart() {
-        this.hexaLapTime = System.currentTimeMillis();
-    }
-
-    public void hexaCreateLapEnd() {
-        this.hexaLapTime = System.currentTimeMillis() - this.hexaLapTime;
-        this.indexCreationTime += this.hexaLapTime;
-    }
-
-    public void dump() {
-        //write to file
-        if (!active) return;
-        log(moteur, dataPath, queriesPath, dataTriplets, numQueries, dataReadTime, queriesReadTime, dictCreationTime,
-                numIndexes, indexCreationTime, workloadEvalTime, totalTime, outputPath);
-
-        //dump to console
-        System.out.println("Nom du fichier de données: " + dataPath);
-        System.out.println("Nom du dossier des requetes: " + queriesPath);
-        System.out.println("Nombre de triplets RDF: " + dataTriplets);
-        System.out.println("Nombre de requetes: " + numQueries);
-        System.out.println("Temps de lecture des données (ms): " + dataReadTime);
-        System.out.println("Temps de lecture des requetes (ms): " + queriesReadTime);
-        System.out.println("Temps création dico (ms): " + dictCreationTime);
-        System.out.println("Nombre d'index: " + numIndexes);
-        System.out.println("Temps de création des index (ms): " + indexCreationTime);
-        System.out.println("Temps total d'évaluation du workload (ms): " + workloadEvalTime);
-    }
-
-    public void countRdfTriple() {
-        this.dataTriplets++;
     }
 
     public void startReadQueriesTime() {
@@ -194,30 +116,31 @@ public class Logger {
         this.queriesReadTime = System.currentTimeMillis() - this.queriesReadTime;
     }
 
+    public void dicoCreateLapStart() {
+        this.dictLapTime = System.currentTimeMillis();
+    }
+    public void dicoCreateLapEnd() {
+        this.dictLapTime = System.currentTimeMillis() - this.dictLapTime;
+        this.dictCreationTime += this.dictLapTime;
+    }
+
+    public void hexaCreateLapStart() {
+        this.hexaLapTime = System.currentTimeMillis();
+    }
+    public void hexaCreateLapEnd() {
+        this.hexaLapTime = System.currentTimeMillis() - this.hexaLapTime;
+        this.indexCreationTime += this.hexaLapTime;
+    }
+
     public void startWorkloadEvalTime() {
         this.workloadEvalTime = System.currentTimeMillis();
     }
-
     public void stopWorkloadEvalTime() {
         this.workloadEvalTime = System.currentTimeMillis() - this.workloadEvalTime;
     }
 
-    public void stopTotalTime() {
-        this.totalTime = System.currentTimeMillis() - this.startTime;
-    }
 
-
-    public long getReadQueriesTime() {
-        return queriesReadTime;
-    }
-    public long getWorkloadTime() {
-        return workloadEvalTime;
-    }
-
-    public void setNumTriplets(long size) {
-        this.dataTriplets = (int) size;
-    }
-
+    //reset the logger
     public static void reset() {
         instance.moteur = "";
         instance.dataTriplets = 0;
@@ -231,4 +154,95 @@ public class Logger {
         instance.startTime = 0;
         instance.totalTime = 0;
     }
+
+    //log methods
+    public static List<String> readHeader(int logType) {
+        String headersPath = "";
+
+        switch (logType)
+        {
+            case 1:
+                headersPath = "defs/CSV_HEADER";
+                break;
+            case 2:
+                headersPath = "defs/ANALYSIS_HEADER";
+                break;
+            default:
+                return null;
+        }
+
+        ArrayList<String> headersList = new ArrayList<>();
+
+        try {
+            Scanner scanner = new Scanner(new File(headersPath));
+            while (scanner.hasNextLine()) {
+                headersList.add(scanner.nextLine());
+            }
+            scanner.close();
+
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+        return headersList;
+    }
+
+    public void log(String dataPath, String queriesPath, int dataTriplets, int numQueries,
+                    long dataReadTime, long queriesReadTime, long dictCreationTime, int numIndexes,
+                    long indexCreationTime, long workloadEvalTime, long totalTime, String outputPath) {
+        if (active) {
+            exportToCSV(dataPath, queriesPath, dataTriplets, numQueries, dataReadTime, queriesReadTime,
+                    dictCreationTime, numIndexes, indexCreationTime, workloadEvalTime, totalTime, outputPath);
+        }
+    }
+
+    public void csvlog(){
+
+        try (FileWriter csvWriter = new FileWriter(new File(Logger.instance.outputPath), true)) {
+
+            // Si le fichier est nouvellement créé, écrire les en-têtes
+            if (new File(outputPath).length() == 0) {
+                for (String header : HEADER) {
+                    csvWriter.append(header).append(",");
+                }
+                csvWriter.append("\n");
+            }
+
+            System.out.println(String.format("%s,%s,%s,%d,%d,%d,%d,%d,%d,%d,%d,%d\n",
+                    moteur, dataPath, queriesPath, dataTriplets, numQueries, dataReadTime, queriesReadTime,
+                    dictCreationTime, numIndexes, indexCreationTime, workloadEvalTime, totalTime));
+
+            csvWriter.write(String.format("%s,%s,%s,%d,%d,%d,%d,%d,%d,%d,%d,%d\n",
+                    moteur, dataPath, queriesPath, dataTriplets, numQueries, dataReadTime, queriesReadTime,
+                    dictCreationTime, numIndexes, indexCreationTime, workloadEvalTime, totalTime));
+
+        } catch (IOException e) {
+            // Gérer les exceptions liées à l'écriture du fichier
+            e.printStackTrace();
+        }
+    }
+
+    private static void exportToCSV(String dataPath, String queriesPath, int dataTriplets, int numQueries,
+                                    long dataReadTime, long queriesReadTime, long dictCreationTime, int numIndexes,
+                                    long indexCreationTime, long workloadEvalTime, long totalTime, String outputPath) {
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(outputPath, true))) {
+            // Écrire la ligne de données CSV
+            writer.write(String.format("%s,%s,%d,%d,%d,%d,%d,%d,%d,%d,%d\n",
+                    dataPath, queriesPath, dataTriplets, numQueries, dataReadTime, queriesReadTime,
+                    dictCreationTime, numIndexes, indexCreationTime, workloadEvalTime, totalTime));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+
+    public void dump() {
+        //write to file
+        if (!active) return;
+
+        csvlog();
+    }
+
+
+
+
 }
