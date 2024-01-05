@@ -1,0 +1,13 @@
+moteur,fichier donnees,fichier requetes,nb triplets RDF,nb requetes,tps lecture donnees (ms),tps lecture requetes (ms),tps creation dico (ms),nb index,tps creation des index (ms),tps total workload (ms),Temps total (ms)
+qengine,./data/data/500K.nt,./data/queries/benchmark.queryset,529580,8600,3319,666,380,6,879,88,4083
+jena,./data/data/500K.nt,./data/queries/benchmark.queryset,522377,8600,3576,874,0,6,0,2363,7104
+qengine,./data/data/2M.nt,./data/queries/benchmark.queryset,2045116,8600,13945,1033,1724,6,5065,601,15592
+jena,./data/data/2M.nt,./data/queries/benchmark.queryset,2029121,8600,14597,817,0,6,0,7274,23005
+qengine,./data/data/500K.nt,./data/queries/benchmark.queryset,529580,8600,3228,639,374,6,889,59,3938
+jena,./data/data/500K.nt,./data/queries/benchmark.queryset,522377,8600,3388,897,0,6,0,2264,6827
+qengine,./data/data/2M.nt,./data/queries/benchmark.queryset,2045116,8600,14091,901,1730,6,5501,507,15511
+jena,./data/data/2M.nt,./data/queries/benchmark.queryset,2029121,8600,14738,810,0,6,0,7299,23161
+qengine,./data/data/500K.nt,./data/queries/benchmark.queryset,529580,8600,3227,612,396,6,918,61,3909
+jena,./data/data/500K.nt,./data/queries/benchmark.queryset,522377,8600,3395,888,0,6,0,2406,6974
+qengine,./data/data/2M.nt,./data/queries/benchmark.queryset,2045116,8600,13326,782,1423,6,5060,389,14510
+jena,./data/data/2M.nt,./data/queries/benchmark.queryset,2029121,8600,14619,901,0,6,0,7475,23298
