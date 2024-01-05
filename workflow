@@ -143,15 +143,21 @@ On remarque :
         écrire protocole de lanchement de benchmark
 
         lancer benchmark sur machines en variant :
+            moteur
             mémoire allouée
-            OS
             data set
 
         analyser les résultats
 
 
 PROTOCOLE BENCHMARK :
-
-
  - lancer moteur sur 500K et 2M avec benchmark.queryset
  -
+
+
+ Graphes :
+
+tps lecture, workload, total par moteur
+    pour 500K et 2M de données
+    pour 2G, 4G, 8G de mémoire allouée
+

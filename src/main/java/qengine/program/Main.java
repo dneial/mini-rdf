@@ -21,6 +21,10 @@ public class Main {
                 Logger.instance.setQueriesPath(queriesPath);
                 Logger.instance.setDataPath(dataPath);
 
+                if (cmd.hasOption("memoire") ) {
+                    String memoire = cmd.getOptionValue("memoire");
+                    Logger.instance.memoire = memoire;
+                }
                 if (cmd.hasOption("output") ) {
                     String outputPath = cmd.getOptionValue("output");
                     Logger.instance.setOutputPath(outputPath);
@@ -134,6 +138,7 @@ public class Main {
         options.addOption("s", "shuffle", false, "Considère une permutation aléatoire des requêtes");
         options.addOption("qi", "query_info", false, "Affiche des informations sur les requêtes");
         options.addOption("jr", "jena_run", true, "Exécute les requêtes avec Jena et qengine puis enregistre leurs résultats dans le csv");
+        options.addOption("m", "memoire", true, "indique la quantité de mémoire allouée au Heap Space en Go");
         return options;
     }
 

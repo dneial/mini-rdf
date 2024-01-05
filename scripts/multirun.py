@@ -27,6 +27,8 @@ def execute_java_program(data_file, memory):
         data_file,
         "-o",
         "output/bench/",
+        "-m",
+        str(memory),
     ]
     subprocess.run(command)
     return
@@ -44,6 +46,8 @@ def execute_jena_program(data_file, memory):
         data_file,
         "-jr",
         "output/bench/",
+        "-m",
+        str(memory),
     ]
     subprocess.run(command)
     return
@@ -51,7 +55,7 @@ def execute_jena_program(data_file, memory):
 def maven_build():
     command = [
         "mvn",
-        "clean",
+        # "clean",
         "package",
     ]
     subprocess.run(command)

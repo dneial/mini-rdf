@@ -18,6 +18,7 @@ public class Logger {
 
     //data to log
     public String moteur;
+    public String memoire;
     public String dataPath;
     public String queriesPath;
     public int dataTriplets;
@@ -78,10 +79,11 @@ public class Logger {
         if (!file.exists()) {
             try (BufferedWriter writer = new BufferedWriter(new FileWriter(outputPath))) {
                 // Écrire l'en-tete CSV
-                writer.write(String.format("%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s\n",
+                writer.write(String.format("%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s\n",
                         this.HEADER.get(0), this.HEADER.get(1), this.HEADER.get(2), this.HEADER.get(3),
                         this.HEADER.get(4), this.HEADER.get(5), this.HEADER.get(6), this.HEADER.get(7),
-                        this.HEADER.get(8), this.HEADER.get(9), this.HEADER.get(10), this.HEADER.get(11)
+                        this.HEADER.get(8), this.HEADER.get(9), this.HEADER.get(10), this.HEADER.get(11),
+                        this.HEADER.get(12)
                 ));
 
             } catch (IOException e) {
@@ -143,6 +145,7 @@ public class Logger {
     //reset the logger
     public static void reset() {
         instance.moteur = "";
+        instance.memoire = "";
         instance.dataTriplets = 0;
         instance.numQueries = 0;
         instance.dataReadTime = 0;
@@ -211,8 +214,8 @@ public class Logger {
 //                    moteur, dataPath, queriesPath, dataTriplets, numQueries, dataReadTime, queriesReadTime,
 //                    dictCreationTime, numIndexes, indexCreationTime, workloadEvalTime, totalTime));
 
-            csvWriter.write(String.format("%s,%s,%s,%d,%d,%d,%d,%d,%d,%d,%d,%d\n",
-                    moteur, dataPath, queriesPath, dataTriplets, numQueries, dataReadTime, queriesReadTime,
+            csvWriter.write(String.format("%s,%s,%s,%s,%d,%d,%d,%d,%d,%d,%d,%d,%d\n",
+                    moteur, memoire, dataPath, queriesPath, dataTriplets, numQueries, dataReadTime, queriesReadTime,
                     dictCreationTime, numIndexes, indexCreationTime, workloadEvalTime, totalTime));
 
         } catch (IOException e) {
@@ -241,8 +244,5 @@ public class Logger {
 
         csvlog();
     }
-
-
-
 
 }
