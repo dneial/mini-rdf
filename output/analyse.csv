@@ -1,0 +1,14 @@
+template,tmps lecture moyen requetes,tmps reponse moyen pattern,nb requetes,nb doublons,nb uniques,nb requetes sans resultats
+Q_3_location_nationality_gender_10000.queryset,323,712,10000,4582,5418,7277
+Q_1_includes_10000.queryset,242,11,10000,7706,2294,283
+Q_2_includes_eligibleRegion_10000.queryset,302,16,10000,94,9906,9726
+Q_3_location_gender_type_10000.queryset,342,40362,10000,9536,464,1386
+Q_4_location_nationality_gender_type_10000.queryset,395,855,10000,4719,5281,8605
+Q_3_nationality_gender_type_10000.queryset,321,20127,10000,9529,471,2279
+Q_1_likes_10000.queryset,252,12,10000,7704,2296,286
+Q_1_eligibleregion_10000.queryset,220,57,10000,9750,250,0
+Q_1_subscribes_10000.queryset,228,23,10000,9500,500,0
+Q_2_tag_homepage_10000.queryset,291,22,10000,429,9571,9710
+Q_2_likes_nationality_10000.queryset,290,156,10000,9750,250,6926
+Q_1_nationality_10000.queryset,221,11,10000,9750,250,149
+Q_2_subscribes_likes_10000.queryset,279,11,10000,57,9943,9912
